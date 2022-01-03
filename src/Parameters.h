@@ -320,6 +320,10 @@ public:
     // considered a structural mutation because of the large impact on fitness
     double MutateNeuronActivationTypeProb;
 
+    // If the output activation functions can be mutated.
+    // If false, the functions will always remain as set in the genome constructor.
+    bool MutateOutputActivationFunction;
+
     // Probabilities for a particular activation function appearance
     double ActivationFunction_SignedSigmoid_Prob;
     double ActivationFunction_UnsignedSigmoid_Prob;

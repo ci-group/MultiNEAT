@@ -351,6 +351,8 @@ namespace NEAT
         // considered a structural mutation because of the large impact on fitness
         MutateNeuronActivationTypeProb = 0.0;
 
+        MutateOutputActivationFunction = false;
+
         // Probabilities for a particular activation function appearance
         ActivationFunction_SignedSigmoid_Prob = 0.0;
         ActivationFunction_UnsignedSigmoid_Prob = 1.0;
@@ -555,6 +557,7 @@ namespace NEAT
         , MaxActivationA(1.0)
         , MinActivationB(0.0)
         , MaxActivationB(0.0)
+        , MutateOutputActivationFunction(false)
         , MutateNeuronActivationTypeProb(0.0)
         , ActivationFunction_SignedSigmoid_Prob(0.0)
         , ActivationFunction_UnsignedSigmoid_Prob(1.0)
@@ -912,6 +915,13 @@ namespace NEAT
             if (s == "MutateNeuronActivationTypeProb")
                 a_DataFile >> MutateNeuronActivationTypeProb;
 
+            if (s == "MutateOutputActivationFunction")
+                a_DataFile >> tf;
+                if (tf == "true" || tf == "1" || tf == "1.0")
+                    MutateOutputActivationFunction = true;
+                else
+                    MutateOutputActivationFunction = false;
+
             if (s == "ActivationFunction_SignedSigmoid_Prob")
                 a_DataFile >> ActivationFunction_SignedSigmoid_Prob;
             if (s == "ActivationFunction_UnsignedSigmoid_Prob")
@@ -1175,6 +1185,8 @@ namespace NEAT
         fprintf(a_fstream, "MaxActivationA %3.20f\n", MaxActivationA);
         fprintf(a_fstream, "MinActivationB %3.20f\n", MinActivationB);
         fprintf(a_fstream, "MaxActivationB %3.20f\n", MaxActivationB);
+        fprintf(a_fstream, "MutateOutputActivationFunction %s\n",
+        MutateOutputActivationFunction == true ? "true" : "false");
         fprintf(a_fstream, "MutateNeuronActivationTypeProb %3.20f\n", MutateNeuronActivationTypeProb);
         fprintf(a_fstream, "ActivationFunction_SignedSigmoid_Prob %3.20f\n", ActivationFunction_SignedSigmoid_Prob);
         fprintf(a_fstream, "ActivationFunction_UnsignedSigmoid_Prob %3.20f\n", ActivationFunction_UnsignedSigmoid_Prob);
