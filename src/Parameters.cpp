@@ -557,8 +557,8 @@ namespace NEAT
         , MaxActivationA(1.0)
         , MinActivationB(0.0)
         , MaxActivationB(0.0)
-        , MutateOutputActivationFunction(false)
         , MutateNeuronActivationTypeProb(0.0)
+        , MutateOutputActivationFunction(false)
         , ActivationFunction_SignedSigmoid_Prob(0.0)
         , ActivationFunction_UnsignedSigmoid_Prob(1.0)
         , ActivationFunction_Tanh_Prob(0.0)
@@ -916,11 +916,13 @@ namespace NEAT
                 a_DataFile >> MutateNeuronActivationTypeProb;
 
             if (s == "MutateOutputActivationFunction")
+            {
                 a_DataFile >> tf;
                 if (tf == "true" || tf == "1" || tf == "1.0")
                     MutateOutputActivationFunction = true;
                 else
                     MutateOutputActivationFunction = false;
+            }
 
             if (s == "ActivationFunction_SignedSigmoid_Prob")
                 a_DataFile >> ActivationFunction_SignedSigmoid_Prob;

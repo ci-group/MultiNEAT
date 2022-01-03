@@ -2617,7 +2617,7 @@ namespace NEAT
         for (unsigned int i = 0; i < NumNeurons(); i++)
         {
             // skip inputs and bias
-            if ((m_NeuronGenes[i].Type() != INPUT) && (m_NeuronGenes[i].Type() != BIAS))
+            if ((!a_Parameters.MutateOutputActivationFunction || m_NeuronGenes[i].Type() != OUTPUT) && (m_NeuronGenes[i].Type() != INPUT) && (m_NeuronGenes[i].Type() != BIAS))
             {
                 double t_randnum = a_RNG.RandFloatSigned() * a_Parameters.ActivationAMutationMaxPower;
 
@@ -2638,7 +2638,7 @@ namespace NEAT
         for (unsigned int i = 0; i < NumNeurons(); i++)
         {
             // skip inputs and bias
-            if ((m_NeuronGenes[i].Type() != INPUT) && (m_NeuronGenes[i].Type() != BIAS))
+            if ((!a_Parameters.MutateOutputActivationFunction || m_NeuronGenes[i].Type() != OUTPUT) && (m_NeuronGenes[i].Type() != INPUT) && (m_NeuronGenes[i].Type() != BIAS))
             {
                 double t_randnum = a_RNG.RandFloatSigned() * a_Parameters.ActivationBMutationMaxPower;
 
@@ -2658,6 +2658,11 @@ namespace NEAT
         // the first non-input neuron
         int t_first_idx = NumInputs();
         int t_choice = a_RNG.RandInt(t_first_idx, m_NeuronGenes.size() - 1);
+
+        if (a_Parameters.MutateOutputActivationFunction && m_NeuronGenes[t_choice].Type() == OUTPUT)
+        {
+            return false;
+        }
 
         int cur = m_NeuronGenes[t_choice].m_ActFunction;
 
