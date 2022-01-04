@@ -24,7 +24,9 @@ jobs:
           command: sudo cmake --install build
       - run:
           name: PIP installing
-          command: pip install .
+          command: |
+            pip install numpy
+            pip install .
       - run:
           name: Testing
           command: cd build && make test
