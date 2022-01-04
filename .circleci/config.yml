@@ -20,10 +20,10 @@ jobs:
           command: cmake -H. -Bbuild -DENABLE_TESTING=1 -DGENERATE_PYTHON_BINDINGS=1
       - run:
           name: Compiling
-          command: cmake --build build
+          command: cmake --build build -j2
       - run:
           name: Installing
-          command: sudo cmake --install build
+          command: sudo cmake --install build -j2
       - run:
           name: PIP installing
           command: |
