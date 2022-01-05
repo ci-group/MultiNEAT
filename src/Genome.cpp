@@ -1489,6 +1489,8 @@ namespace NEAT
 
     void Genome::Mutate(bool t_baby_is_clone, const SearchMode a_searchMode, InnovationDatabase &a_innov_database, const Parameters &a_Parameters, RNG &a_RNG)
     {
+        std::cout << "MutateOutputActivationFunction" << a_Parameters.MutateOutputActivationFunction << std::endl;
+
         // We will perform roulette wheel selection to choose the type of mutation and will mutate the baby
         // This method guarantees that the baby will be mutated at least with one mutation
         enum MutationTypes
@@ -2617,8 +2619,8 @@ namespace NEAT
         for (unsigned int i = 0; i < NumNeurons(); i++)
         {
             // skip inputs and bias and output is that setting is enabled
-            if (!(a_Parameters.MutateOutputActivationFunction &&
-                    m_NeuronGenes[i].Type() == OUTPUT) &&
+            if ((a_Parameters.MutateOutputActivationFunction ||
+                   m_NeuronGenes[i].Type() != OUTPUT) &&
                 (m_NeuronGenes[i].Type() != INPUT) &&
                 (m_NeuronGenes[i].Type() != BIAS))
             {
@@ -2641,8 +2643,8 @@ namespace NEAT
         for (unsigned int i = 0; i < NumNeurons(); i++)
         {
             // skip inputs and bias and output is that setting is enabled
-            if (!(a_Parameters.MutateOutputActivationFunction &&
-                    m_NeuronGenes[i].Type() == OUTPUT) &&
+            if ((a_Parameters.MutateOutputActivationFunction ||
+                   m_NeuronGenes[i].Type() != OUTPUT) &&
                 (m_NeuronGenes[i].Type() != INPUT) &&
                 (m_NeuronGenes[i].Type() != BIAS))
             {
@@ -2666,7 +2668,7 @@ namespace NEAT
         int t_choice = a_RNG.RandInt(t_first_idx, m_NeuronGenes.size() - 1);
 
         // do not mutate if this neuron is an output neuron if that setting is enabled
-        if (a_Parameters.MutateOutputActivationFunction &&
+        if (!a_Parameters.MutateOutputActivationFunction &&
             m_NeuronGenes[t_choice].Type() == OUTPUT)
         {
             return false;
