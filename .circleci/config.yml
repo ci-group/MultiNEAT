@@ -23,6 +23,9 @@ jobs:
 #          name: Installing
 #          command: cd build && sudo make install
       - run:
+          name: install requirements
+          command: pip install -r requirements.txt
+      - run:
           name: PIP installing
           command: pip install .
       - run:
