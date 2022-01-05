@@ -24,7 +24,7 @@ jobs:
 #          command: cd build && sudo make install
       - run:
           name: install requirements
-          command: ls /usr/local/lib64/ #pip install -r requirements.txt
+          command: ls /usr/local/ #pip install -r requirements.txt
       - run:
           name: PIP installing
           command: pip install .
