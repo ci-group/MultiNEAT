@@ -24,7 +24,7 @@ jobs:
           command: sudo cmake --build build --target install -j2
       - run:
           name: PIP installing
-          command: pip install .
+          command: sudo pip install .
       - run:
           name: Testing
           command: cd build && make test
