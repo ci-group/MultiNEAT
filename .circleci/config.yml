@@ -27,10 +27,10 @@ jobs:
           command: pip install -r requirements.txt
       - run:
           name: sadfasd
-          command: ls venv/lib/python3.8/site-packages
+          command: ls venv/lib/python3.10/site-packages
       - run:
           name: sadfasd
-          command: ls venv/lib64/python3.8/site-packages
+          command: ls venv/lib64/python3.10/site-packages
       - run:
           name: PIP installing
           command: pip install .
