@@ -26,6 +26,9 @@ jobs:
           name: install requirements
           command: pip install -r requirements.txt
       - run:
+          name: sadfasd
+          command: ls venv
+      - run:
           name: PIP installing
           command: pip install .
       - run:
