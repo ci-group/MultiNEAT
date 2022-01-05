@@ -14,16 +14,16 @@ jobs:
             python3 -m venv venv
             source venv/bin/activate
      - run:
-         name: Creating Build Files
-         command: cmake -H. -Bbuild -DENABLE_TESTING=1 -DGENERATE_PYTHON_BINDINGS=1
+          name: Creating Build Files
+          command: cmake -H. -Bbuild -DENABLE_TESTING=1 -DGENERATE_PYTHON_BINDINGS=1
      - run:
-         name: Compiling
-         command: cmake --build build -j2
+          name: Compiling
+          command: cmake --build build -j2
      - run:
-         name: Installing
-         command: cd build && sudo make install
+          name: Installing
+          command: cd build && sudo make install
       - run:
-          name: install requirements
+          name: Install requirements
           command: pip install -r requirements.txt
       - run:
           name: PIP installing
