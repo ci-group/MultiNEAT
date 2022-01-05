@@ -16,7 +16,7 @@ jobs:
             python3 -m venv venv
             source venv/bin/activate
       - run:
-          command: ls /usr/local/lib64
+          command: ls venv
       - run:
           name: Creating Build Files
           command: cmake -H. -Bbuild -DENABLE_TESTING=1 -DGENERATE_PYTHON_BINDINGS=1
