@@ -1489,8 +1489,6 @@ namespace NEAT
 
     void Genome::Mutate(bool t_baby_is_clone, const SearchMode a_searchMode, InnovationDatabase &a_innov_database, const Parameters &a_Parameters, RNG &a_RNG)
     {
-        std::cout << "MutateOutputActivationFunction" << a_Parameters.MutateOutputActivationFunction << std::endl;
-
         // We will perform roulette wheel selection to choose the type of mutation and will mutate the baby
         // This method guarantees that the baby will be mutated at least with one mutation
         enum MutationTypes
