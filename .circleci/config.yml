@@ -21,7 +21,7 @@ jobs:
           command: cmake --build build -j2
       - run:
           name: Installing
-          command: cmake --build build --target install -j2
+          command: sudo make install
       - run:
           name: PIP installing
           command: pip install .
