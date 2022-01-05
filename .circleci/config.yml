@@ -7,9 +7,7 @@ jobs:
       - checkout
       - run:
           name: Installing CMAKE
-          command: |
-            sudo apt update -y
-            sudo apt install -y cmake libboost-python-dev libboost-numpy-dev libboost-all-dev python3-numpy
+          command: sudo apt install -y cmake libboost-python-dev libboost-numpy-dev libboost-all-dev
       - run:
           name: Create Virtual Environment
           command: |
@@ -26,9 +24,7 @@ jobs:
           command: cmake --build build --target install -j2
       - run:
           name: PIP installing
-          command: |
-            pip install numpy
-            pip install .
+          command: pip install .
       - run:
           name: Testing
           command: cd build && make test
