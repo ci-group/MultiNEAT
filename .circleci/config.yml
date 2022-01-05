@@ -22,6 +22,12 @@ jobs:
           name: Compiling
           command: cmake --build build -j2
       - run:
+          command: ls /usr/local/lib64/python3.10/site-packages
+      - run:
+          command: ls /usr/local/lib/python3.10/site-packages
+      - run:
+          command: ls /usr/local/lib64
+      - run:
           name: Installing
           command: sudo cmake --build build --target install -j2
       - run:
