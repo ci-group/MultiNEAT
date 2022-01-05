@@ -15,16 +15,16 @@ jobs:
             source venv/bin/activate
       - run:
           name: Creating Build Files
-          command: sudo cmake -H. -Bbuild -DENABLE_TESTING=1 -DGENERATE_PYTHON_BINDINGS=1
+          command: cmake -H. -Bbuild -DENABLE_TESTING=1 -DGENERATE_PYTHON_BINDINGS=1
       - run:
           name: Compiling
-          command: sudo cmake --build build -j2
+          command: cmake --build build -j2
       - run:
           name: Installing
-          command: sudo cmake --build build --target install -j2
+          command: cd build && sudo make install
       - run:
           name: PIP installing
-          command: sudo pip install .
+          command: pip install .
       - run:
           name: Testing
           command: cd build && make test
