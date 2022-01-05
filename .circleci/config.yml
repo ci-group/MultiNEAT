@@ -13,24 +13,18 @@ jobs:
           command: |
             python3 -m venv venv
             source venv/bin/activate
-#      - run:
-#          name: Creating Build Files
-#          command: cmake -H. -Bbuild -DENABLE_TESTING=1 -DGENERATE_PYTHON_BINDINGS=1
-#      - run:
-#          name: Compiling
-#          command: cmake --build build -j2
-#      - run:
-#          name: Installing
-#          command: cd build && sudo make install
+     - run:
+         name: Creating Build Files
+         command: cmake -H. -Bbuild -DENABLE_TESTING=1 -DGENERATE_PYTHON_BINDINGS=1
+     - run:
+         name: Compiling
+         command: cmake --build build -j2
+     - run:
+         name: Installing
+         command: cd build && sudo make install
       - run:
           name: install requirements
           command: pip install -r requirements.txt
-      - run:
-          name: sadfasd
-          command: ls venv/lib/python3.10/site-packages
-      - run:
-          name: sadfasd
-          command: ls venv/lib64/python3.10/site-packages
       - run:
           name: PIP installing
           command: pip install .
