@@ -16,8 +16,6 @@ jobs:
             python3 -m venv venv
             source venv/bin/activate
       - run:
-          command: ls venv
-      - run:
           name: Creating Build Files
           command: cmake -H. -Bbuild -DENABLE_TESTING=1 -DGENERATE_PYTHON_BINDINGS=1
       - run:
@@ -25,7 +23,7 @@ jobs:
           command: cmake --build build -j2
       - run:
           name: Installing
-          command: sudo cmake --build build --target install -j2
+          command: cmake --build build --target install -j2
       - run:
           name: PIP installing
           command: |
