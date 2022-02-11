@@ -73,8 +73,8 @@ private:
 
     // Neuron/Link specific data
     int m_FromNeuronID, m_ToNeuronID;
-    int m_NeuronID;
     NeuronType m_NeuronType;
+    int m_NeuronID;
 
 public:
 

@@ -35,7 +35,9 @@
 #include <limits>
 #include <cmath>
 #include <utility>
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
+#include <functional>
+#include <numeric>
 #include <boost/shared_ptr.hpp>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
@@ -47,8 +49,34 @@
 #include "Parameters.h"
 #include "MultiNEATAssert.h"
 
+// https://stackoverflow.com/questions/10405030/c-unordered-map-fail-when-used-with-a-vector-as-key
+template <class T>
+std::size_t hash_combine(std::size_t &seed, const T &v)
+{
+    std::hash<T> hasher;
+    return seed ^ (hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2));
+}
+
+namespace std
+{
+    template <>
+    struct hash<std::vector<double>>
+    {
+        std::size_t operator()(const std::vector<double>& value) const
+        {
+            return std::accumulate(value.begin(), value.end(), 0.0, [&](size_t a, double b){return hash_combine(a, std::hash<double>()(b));});
+        }
+    };
+}
+
 namespace NEAT
 {
+    template <class T>
+    inline void hash_combine(std::size_t& seed, const T& v)
+    {
+        std::hash<T> hasher;
+        seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
+    }
 
     // forward
     ActivationFunction GetRandomActivation( const Parameters &a_Parameters, RNG &a_RNG);
@@ -1276,7 +1304,6 @@ namespace NEAT
 
         // used for percentage of excess/disjoint genes calculation
         int t_max_genome_size = static_cast<int> (NumLinks()   < a_G.NumLinks())   ? (a_G.NumLinks())   : (NumLinks());
-        int t_max_neurons     = static_cast<int> (NumNeurons() < a_G.NumNeurons()) ? (a_G.NumNeurons()) : (NumNeurons());
 
         t_g1 = m_LinkGenes.cbegin();
         t_g2 = a_G.m_LinkGenes.cbegin();
@@ -3575,13 +3602,13 @@ namespace NEAT
 //
 //        boost::shared_ptr<nTree> root;
 //
-//        boost::unordered_map<std::vector<double>, int> hidden_nodes;
+//        std::unordered_map<std::vector<double>, int> hidden_nodes;
 //        hidden_nodes.reserve(maxNodes);
 //
-//        boost::unordered_map<std::vector<double>, int> temp;
+//        std::unordered_map<std::vector<double>, int> temp;
 //        temp.reserve(maxNodes);
 //
-//        boost::unordered_map<std::vector<double>, int> unexplored_nodes;
+//        std::unordered_map<std::vector<double>, int> unexplored_nodes;
 //        unexplored_nodes.reserve(maxNodes);
 //
 //        net.m_neurons.reserve(maxNodes);
@@ -3642,7 +3669,7 @@ namespace NEAT
 //        unexplored_nodes = hidden_nodes;
 //        for (unsigned int i = 0; i < params.IterationLevel; i++)
 //        {
-//            boost::unordered_map<std::vector<double>, int>::iterator itr_hid;
+//            std::unordered_map<std::vector<double>, int>::iterator itr_hid;
 //            for (itr_hid = unexplored_nodes.begin(); itr_hid != unexplored_nodes.end(); itr_hid++)
 //            {
 //                root = boost::shared_ptr<nTree>(
@@ -3679,7 +3706,7 @@ namespace NEAT
 //                }
 //            }
 //            // Now get the newly discovered hidden nodes
-//            boost::unordered_map<std::vector<double>, int>::iterator itr1;
+//            std::unordered_map<std::vector<double>, int>::iterator itr1;
 //            for (itr1 = hidden_nodes.begin(); itr1 != hidden_nodes.end(); itr1++)
 //            {
 //                if (unexplored_nodes.find(itr1->first) == unexplored_nodes.end())
@@ -3754,7 +3781,7 @@ namespace NEAT
 //            net.m_neurons.push_back(t_n);
 //        }
 //
-//        boost::unordered_map<std::vector<double>, int>::iterator itr;
+//        std::unordered_map<std::vector<double>, int>::iterator itr;
 //        for (itr = hidden_nodes.begin(); itr != hidden_nodes.end(); itr++)
 //        {
 //            Neuron t_n;
@@ -3793,13 +3820,13 @@ namespace NEAT
 
         boost::shared_ptr<QuadPoint> root;
 
-        boost::unordered_map<std::vector<double>, int> hidden_nodes;
+        std::unordered_map<std::vector<double>, int> hidden_nodes;
         hidden_nodes.reserve(maxNodes);
 
-        boost::unordered_map<std::vector<double>, int> temp;
+        std::unordered_map<std::vector<double>, int> temp;
         temp.reserve(maxNodes);
 
-        boost::unordered_map<std::vector<double>, int> unexplored_nodes;
+        std::unordered_map<std::vector<double>, int> unexplored_nodes;
         unexplored_nodes.reserve(maxNodes);
 
         net.m_neurons.reserve(maxNodes);
@@ -3854,7 +3881,7 @@ namespace NEAT
         unexplored_nodes = hidden_nodes;
         for (unsigned int i = 0; i < params.IterationLevel; i++)
         {
-            boost::unordered_map<std::vector<double>, int>::iterator itr_hid;
+            std::unordered_map<std::vector<double>, int>::iterator itr_hid;
             for (itr_hid = unexplored_nodes.begin(); itr_hid != unexplored_nodes.end(); itr_hid++)
             {
                 root = boost::shared_ptr<QuadPoint>(
@@ -3891,7 +3918,7 @@ namespace NEAT
                 }
             }
             // Now get the newly discovered hidden nodes
-            boost::unordered_map<std::vector<double>, int>::iterator itr1;
+            std::unordered_map<std::vector<double>, int>::iterator itr1;
             for (itr1 = hidden_nodes.begin(); itr1 != hidden_nodes.end(); itr1++)
             {
                 if (unexplored_nodes.find(itr1->first) == unexplored_nodes.end())
@@ -3966,7 +3993,7 @@ namespace NEAT
             net.m_neurons.push_back(t_n);
         }
 
-        boost::unordered_map<std::vector<double>, int>::iterator itr;
+        std::unordered_map<std::vector<double>, int>::iterator itr;
         for (itr = hidden_nodes.begin(); itr != hidden_nodes.end(); itr++)
         {
             Neuron t_n;
@@ -4137,8 +4164,8 @@ namespace NEAT
 
             }
 
-            if ((p->level < params.InitialDepth) ||
-                ((p->level < params.MaxDepth) && Variance(p) > params.DivisionThreshold))
+            if ((p->level < static_cast<int>(params.InitialDepth)) ||
+                ((p->level < static_cast<int>(params.MaxDepth)) && Variance(p) > params.DivisionThreshold))
             {
                 for (unsigned int i = 0; i < 4; i++)
                 {
