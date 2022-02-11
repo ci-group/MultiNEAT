@@ -177,7 +177,7 @@ public:
     std::vector<double> Output();
 
     // accessor methods
-    void AddNeuron(const Neuron& a_n) { m_neurons.push_back( a_n ); }
+    void AddNeuron(const Neuron a_n) { m_neurons.push_back( a_n ); }
     void AddConnection(const Connection& a_c) { m_connections.push_back( a_c ); }
     Connection GetConnectionByIndex(unsigned int a_idx) const
     {
