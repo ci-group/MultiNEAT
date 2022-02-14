@@ -14,7 +14,6 @@
 #ifdef USE_BOOST_PYTHON
 #include <boost/python.hpp>
 #endif
-#include <boost/shared_ptr.hpp>
 
 namespace bs = boost;
 #ifdef USE_BOOST_PYTHON

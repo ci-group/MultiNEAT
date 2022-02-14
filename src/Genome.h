@@ -33,12 +33,8 @@
 #ifdef USE_BOOST_PYTHON
 
 #include <boost/python.hpp>
-#include <boost/shared_ptr.hpp>
 
 #endif
-
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
 
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
@@ -527,7 +523,7 @@ namespace NEAT
             double leo;
 
 
-            std::vector<boost::shared_ptr<QuadPoint> > children;
+            std::vector<std::shared_ptr<QuadPoint> > children;
 
             QuadPoint()
             {
@@ -582,7 +578,7 @@ namespace NEAT
             int lvl;
             double width;
             double leo = 0.0;
-            std::vector<boost::shared_ptr<nTree> > children;
+            std::vector<std::shared_ptr<nTree> > children;
 
             nTree(std::vector<double> coord_in, double wdth, double level)
             {
@@ -610,7 +606,7 @@ namespace NEAT
                             child_coords.push_back(coord[sign_ix] - width/2.0);
                         }
                         children.push_back(
-                                boost::make_shared<nTree>(child_coords, width/2.0, lvl+1)
+                            std::make_shared<nTree>(child_coords, width/2.0, lvl+1)
                         );
                     }
                 }
@@ -635,32 +631,22 @@ namespace NEAT
                 return r;
             }
         };
-//        void BuildESHyperNEATPhenotypeND(NeuralNetwork &a_net, Substrate &subst, Parameters &params);
+
         void BuildESHyperNEATPhenotype(NeuralNetwork &a_net, Substrate &subst, Parameters &params);
 
         void DivideInitialize(const std::vector<double> &node,
-                              boost::shared_ptr<QuadPoint> &root,
+                              std::shared_ptr<QuadPoint> &root,
                               NeuralNetwork &cppn, Parameters &params,
                               const bool &outgoing, const double &z_coord);
 
         void PruneExpress(const std::vector<double> &node,
-                          boost::shared_ptr<QuadPoint> &root, NeuralNetwork &cppn,
+                          std::shared_ptr<QuadPoint> &root, NeuralNetwork &cppn,
                           Parameters &params, std::vector<Genome::TempConnection> &connections,
                           const bool &outgoing);
-//        void DivideInitializeND(const std::vector<double> &node,
-//                              boost::shared_ptr<nTree> &root,
-//                              NeuralNetwork &cppn, Parameters &params,
-//                              const bool &outgoing, const double &z_coord);
 
-//        void PruneExpressND(const std::vector<double> &node,
-//                          boost::shared_ptr<nTree> &root, NeuralNetwork &cppn,
-//                          Parameters &params, std::vector<Genome::TempConnection> &connections,
-//                          const bool &outgoing);
+        void CollectValues(std::vector<double> &vals, std::shared_ptr<QuadPoint> &point);
 
-
-        void CollectValues(std::vector<double> &vals, boost::shared_ptr<QuadPoint> &point);
-
-        double Variance(boost::shared_ptr<QuadPoint> &point);
+        double Variance(std::shared_ptr<QuadPoint> &point);
 
         void Clean_Net(std::vector<Connection> &connections, unsigned int input_count,
                        unsigned int output_count, unsigned int hidden_count);
