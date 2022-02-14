@@ -14,7 +14,7 @@ std::string serialize(const NEAT::Genome &g)
     std::ostringstream output_data;
 
     {
-        boost::archive::text_oarchive archive(output_data);
+        cereal::JSONOutputArchive archive(output_data);
         archive << g;
     }
 
@@ -26,7 +26,7 @@ NEAT::Genome deserialize(const std::string &data)
     NEAT::Genome g;
     std::istringstream input_data(data);
     {
-        boost::archive::text_iarchive archive(input_data);
+        cereal::JSONInputArchive archive(input_data);
         archive >> g;
     }
     return g;

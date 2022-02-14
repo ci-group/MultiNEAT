@@ -685,8 +685,10 @@ namespace NEAT
         std::string Serialize() const
         {
             std::ostringstream os;
-            cereal::JSONOutputArchive oa(os);
-            oa << *this;
+            {
+                cereal::JSONOutputArchive oa(os);
+                oa << *this;
+            }
             return os.str();
         }
 

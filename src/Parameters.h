@@ -963,8 +963,10 @@ struct Parameters_pickle_suite : py::pickle_suite
     static py::object getstate(const Parameters& a)
     {
         std::ostringstream os;
-        cereal::JSONOutputArchive oa(os);
-        oa << a;
+        {
+            cereal::JSONOutputArchive oa(os);
+            oa << a;
+        }
         return py::str(os.str());
     }
 
