@@ -18,10 +18,6 @@
 
 #include <iostream>
 #include <limits>
-#include <boost/asio.hpp>
-#include <boost/thread.hpp>
-#include <boost/bind.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
 
 #define BOOST_TEST_MODULE XOR test
 #include <boost/test/included/unit_test.hpp>
@@ -124,7 +120,7 @@ BOOST_AUTO_TEST_CASE(multineat_xor)
              params,
              0);
 
-    int seed = 0; // time(nullptr)
+    int seed = 0;
     Population pop(starting_genome, params, true, 1.0, seed);
     pop.m_RNG.Seed(seed);
 

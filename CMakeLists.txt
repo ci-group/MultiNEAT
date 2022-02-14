@@ -73,11 +73,6 @@ if (NOT SKBUILD)
             Threads::Threads
             )
 
-    target_compile_definitions(MultiNEAT
-            PUBLIC
-            USE_BOOST_RANDOM
-            )
-
     # INSTALL SECTION
     set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/MultiNEAT)
 
@@ -267,7 +262,6 @@ if(GENERATE_PYTHON_BINDINGS)
 
     target_compile_definitions(_multineat
             PUBLIC
-            USE_BOOST_RANDOM
             USE_BOOST_PYTHON
             )
 

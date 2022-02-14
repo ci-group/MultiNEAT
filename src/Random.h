@@ -30,12 +30,7 @@
 // Description: Declarations for a class dealing with random numbers.
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef USE_BOOST_RANDOM
-    #include <boost/random.hpp>
-#else
-    #include <stdlib.h>
-#endif
-
+#include <cstdlib>
 #include <vector>
 #include <limits>
 
@@ -44,10 +39,6 @@ namespace NEAT
 
 class RNG
 {
-    
-#ifdef USE_BOOST_RANDOM
-    boost::random::mt19937 gen;
-#endif
 
 public:
     // Seeds the random number generator with this value
