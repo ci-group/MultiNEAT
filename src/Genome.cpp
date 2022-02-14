@@ -39,9 +39,6 @@
 #include <functional>
 #include <numeric>
 #include <memory>
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
-#include <boost/accumulators/statistics/variance.hpp>
 
 #include "Genome.h"
 #include "Random.h"
@@ -4017,17 +4014,6 @@ namespace NEAT
         return;
     }
 
-//    double Genome::VarianceND(std::shared_ptr<nTree> &point){
-//        if(point->children.size() == 0){
-//            return 0.0;
-//        }
-//
-//        boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance> > acc;
-//        for (unsigned int i = 0; i < point->children.size(); i++){
-//            acc(point->children[i]->weight);)
-//        }
-//        return boost::accumulators::variance(acc);
-//    }
     // Calculates the variance of a given Quadpoint.
     // Maybe an alternative solution would be to add this in the Quadpoint const.
     double Genome::Variance(std::shared_ptr<QuadPoint> &point)
@@ -4037,13 +4023,13 @@ namespace NEAT
             return 0.0;
         }
 
-        boost::accumulators::accumulator_set<double, boost::accumulators::stats<boost::accumulators::tag::variance> > acc;
-        for (unsigned int i = 0; i < 4; i++)
-        {
-            acc(point->children[i]->weight);
-        }
+        double mean = std::accumulate(point->children.begin(), point->children.end(), 0.0, [](double sum, auto child){return sum + child->weight;}) / 4;
 
-        return boost::accumulators::variance(acc);
+        auto variance_func = [&mean](double accumulator, auto const& child) {
+            return accumulator + ((child->weight - mean)*(child->weight - mean) / (4 - 1));
+        };
+
+        return std::accumulate(point->children.begin(), point->children.end(), 0.0, variance_func);
     }
 
     // Helper method for Variance
