@@ -33,9 +33,6 @@
 #ifdef USE_BOOST_PYTHON
 
 #include <boost/python.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
 #include <boost/shared_ptr.hpp>
 
 #endif
@@ -46,6 +43,10 @@
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/topological_sort.hpp>
+
+#include <cereal/cereal.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/archives/json.hpp>
 
 #include <vector>
 #include <queue>
@@ -665,9 +666,8 @@ namespace NEAT
                        unsigned int output_count, unsigned int hidden_count);
 
         // Serialization
-        friend class boost::serialization::access;
         template<class Archive>
-        void serialize(Archive & ar, const unsigned int version)
+        void serialize(Archive & ar)
         {
             ar & m_ID;
             ar & m_NeuronGenes;
@@ -685,7 +685,7 @@ namespace NEAT
         std::string Serialize() const
         {
             std::ostringstream os;
-            boost::archive::text_oarchive oa(os);
+            cereal::JSONOutputArchive oa(os);
             oa << *this;
             return os.str();
         }
@@ -693,7 +693,7 @@ namespace NEAT
         void Deserialize(const std::string &text)
         {
             std::istringstream is (text);
-            boost::archive::text_iarchive ia (is);
+            cereal::JSONInputArchive ia(is);
             ia >> *this;
         }
 

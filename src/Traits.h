@@ -14,9 +14,6 @@
 #ifdef USE_BOOST_PYTHON
 #include <boost/python.hpp>
 #endif
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace bs = boost;

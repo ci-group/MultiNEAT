@@ -31,9 +31,6 @@
 #ifdef USE_BOOST_PYTHON
 
 #include <boost/python.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
 
 namespace py = boost::python;
 

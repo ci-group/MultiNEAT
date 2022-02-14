@@ -4,8 +4,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
 #include <Genome.h>
 
 #define BOOST_TEST_MODULE Serialization test

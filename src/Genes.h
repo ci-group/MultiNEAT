@@ -33,9 +33,6 @@
 #ifdef USE_BOOST_PYTHON
 
 #include <boost/python.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
 
 namespace py = boost::python;
 
@@ -48,6 +45,8 @@ namespace py = boost::python;
 #include "Traits.h"
 #include "Random.h"
 #include "Utils.h"
+
+#include <cereal/cereal.hpp>
 
 
 namespace NEAT
@@ -547,9 +546,8 @@ namespace NEAT
     public:
 
         // Serialization
-        friend class boost::serialization::access;
         template<class Archive>
-        void serialize(Archive & ar, const unsigned int version)
+        void serialize(Archive & ar)
         {
             ar & m_FromNeuronID;
             ar & m_ToNeuronID;
@@ -727,9 +725,8 @@ namespace NEAT
         ActivationFunction m_ActFunction;
 
         // Serialization
-        friend class boost::serialization::access;
         template<class Archive>
-        void serialize(Archive & ar, const unsigned int version)
+        void serialize(Archive & ar)
         {
             ar & m_ID;
             ar & m_Type;
