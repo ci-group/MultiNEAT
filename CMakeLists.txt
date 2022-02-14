@@ -32,6 +32,8 @@ find_package(Boost
         REQUIRED
         )
 
+find_package(cereal REQUIRED)
+
 set(SOURCE_FILES
         src/Genome.cpp
         src/Innovation.cpp

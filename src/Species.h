@@ -224,9 +224,8 @@ public:
     void RemoveIndividual(unsigned int a_idx);
 
     // Serialization
-    friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
+    void serialize(Archive & ar)
     {
         ar & m_ID;
         ar & m_BestSpecies;

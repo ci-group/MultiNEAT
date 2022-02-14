@@ -36,9 +36,8 @@
 #ifdef USE_BOOST_PYTHON
 
 #include <boost/python.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
+#include <cereal/cereal.hpp>
+#include <cereal/archives/json.hpp>
 
 namespace py = boost::python;
 
@@ -821,9 +820,8 @@ public:
     
     
     // Serialization
-    friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
+    void serialize(Archive & ar)
     {
         ar & PopulationSize;
         ar & DynamicCompatibility;
@@ -965,7 +963,7 @@ struct Parameters_pickle_suite : py::pickle_suite
     static py::object getstate(const Parameters& a)
     {
         std::ostringstream os;
-        boost::archive::text_oarchive oa(os);
+        cereal::JSONOutputArchive oa(os);
         oa << a;
         return py::str(os.str());
     }
@@ -976,7 +974,7 @@ struct Parameters_pickle_suite : py::pickle_suite
         std::string st = py::extract<std::string> (s)();
         std::istringstream is(st);
 
-        boost::archive::text_iarchive ia (is);
+        cereal::JSONInputArchive ia(is);
         ia >> a;
     }
     

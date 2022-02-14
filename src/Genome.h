@@ -705,10 +705,7 @@ namespace NEAT
     {
         static py::object getstate(const Genome& a)
         {
-            std::ostringstream os;
-            boost::archive::text_oarchive oa(os);
-            oa << a;
-            return py::str (os.str());
+            return py::str(a.Serialize());
         }
 
         static void setstate(Genome& a, py::object entries)

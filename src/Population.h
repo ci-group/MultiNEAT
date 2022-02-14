@@ -323,9 +323,8 @@ public:
     unsigned int m_QuickAddCounter;
 
     // Serialization
-    friend class boost::serialization::access;
     template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
+    void serialize(Archive & ar)
     {
         ar & m_InnovationDatabase;
         ar & m_NextGenomeID;
@@ -362,7 +361,7 @@ struct Population_pickle_suite : py::pickle_suite
     static py::object getstate(const Population& a)
     {
         std::ostringstream os;
-        boost::archive::text_oarchive oa(os);
+        cereal::JSONOutputArchive oa(os);
         oa << a;
         return py::str(os.str());
     }
@@ -370,10 +369,10 @@ struct Population_pickle_suite : py::pickle_suite
     static void setstate(Population &a, py::object entries)
     {
         py::str s = py::extract<py::str> (entries)();
-        std::string st = py::extract<std::string>(s)();
-        std::istringstream is (st);
+        std::string st = py::extract<std::string> (s)();
+        std::istringstream is(st);
 
-        boost::archive::text_iarchive ia (is);
+        cereal::JSONInputArchive ia(is);
         ia >> a;
     }
 };
