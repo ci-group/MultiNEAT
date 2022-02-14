@@ -7,17 +7,15 @@
 
 #include <string>
 #include <vector>
-#include <boost/any.hpp>
-#include <boost/variant.hpp>
+#include <variant>
 #include <cmath>
 
 #ifdef USE_BOOST_PYTHON
 #include <boost/python.hpp>
 #endif
 
-namespace bs = boost;
 #ifdef USE_BOOST_PYTHON
-namespace py = bs::python;
+namespace py = boost::python;
 #endif
 
 namespace NEAT
@@ -45,7 +43,7 @@ namespace NEAT
         double value;
     };
     
-    typedef bs::variant<int, double, std::string, intsetelement, floatsetelement
+    typedef std::variant<int, double, std::string, intsetelement, floatsetelement
 #ifdef USE_BOOST_PYTHON
   , py::object
 #endif
@@ -106,7 +104,7 @@ namespace NEAT
         double m_MutationProb;
 
         std::string type; // can be "int", "float", "string", "intset", "floatset", "pyobject"
-        bs::variant<IntTraitParameters,
+        std::variant<IntTraitParameters,
                     FloatTraitParameters,
                     StringTraitParameters,
                     IntSetTraitParameters,

@@ -646,20 +646,20 @@ public:
             dt = py::dict();
 
             t["type"] = "int";
-            dt["min"] = bs::get<IntTraitParameters>(pms.m_Details).min;
-            dt["max"] = bs::get<IntTraitParameters>(pms.m_Details).max;
-            dt["mut_power"] = bs::get<IntTraitParameters>(pms.m_Details).mut_power;
-            dt["mut_replace_prob"] = bs::get<IntTraitParameters>(pms.m_Details).mut_replace_prob;
+            dt["min"] = std::get<IntTraitParameters>(pms.m_Details).min;
+            dt["max"] = std::get<IntTraitParameters>(pms.m_Details).max;
+            dt["mut_power"] = std::get<IntTraitParameters>(pms.m_Details).mut_power;
+            dt["mut_replace_prob"] = std::get<IntTraitParameters>(pms.m_Details).mut_replace_prob;
         }
         else if (pms.type == "float")
         {
             dt = py::dict();
 
             t["type"] = "float";
-            dt["min"] = bs::get<FloatTraitParameters>(pms.m_Details).min;
-            dt["max"] = bs::get<FloatTraitParameters>(pms.m_Details).max;
-            dt["mut_power"] = bs::get<FloatTraitParameters>(pms.m_Details).mut_power;
-            dt["mut_replace_prob"] = bs::get<FloatTraitParameters>(pms.m_Details).mut_replace_prob;
+            dt["min"] = std::get<FloatTraitParameters>(pms.m_Details).min;
+            dt["max"] = std::get<FloatTraitParameters>(pms.m_Details).max;
+            dt["mut_power"] = std::get<FloatTraitParameters>(pms.m_Details).mut_power;
+            dt["mut_replace_prob"] = std::get<FloatTraitParameters>(pms.m_Details).mut_replace_prob;
         }
         else if (pms.type == "str")
         {
@@ -668,11 +668,11 @@ public:
             t["type"] = "str";
             py::list set;
             py::list probs;
-            int ssize = bs::get<StringTraitParameters>(pms.m_Details).set.size();
+            int ssize = std::get<StringTraitParameters>(pms.m_Details).set.size();
             for(int i=0; i<ssize; i++)
             {
-                set.append(bs::get<StringTraitParameters>(pms.m_Details).set[i]);
-                probs.append(bs::get<StringTraitParameters>(pms.m_Details).probs[i]);
+                set.append(std::get<StringTraitParameters>(pms.m_Details).set[i]);
+                probs.append(std::get<StringTraitParameters>(pms.m_Details).probs[i]);
             }
             
             dt["set"] = set;
@@ -685,11 +685,11 @@ public:
             t["type"] = "intset";
             py::list set;
             py::list probs;
-            int ssize = bs::get<IntSetTraitParameters>(pms.m_Details).set.size();
+            int ssize = std::get<IntSetTraitParameters>(pms.m_Details).set.size();
             for(int i=0; i<ssize; i++)
             {
-                set.append(bs::get<IntSetTraitParameters>(pms.m_Details).set[i].value);
-                probs.append(bs::get<IntSetTraitParameters>(pms.m_Details).probs[i]);
+                set.append(std::get<IntSetTraitParameters>(pms.m_Details).set[i].value);
+                probs.append(std::get<IntSetTraitParameters>(pms.m_Details).probs[i]);
             }
 
             dt["set"] = set;
@@ -702,11 +702,11 @@ public:
             t["type"] = "floatset";
             py::list set;
             py::list probs;
-            int ssize = bs::get<FloatSetTraitParameters>(pms.m_Details).set.size();
+            int ssize = std::get<FloatSetTraitParameters>(pms.m_Details).set.size();
             for(int i=0; i<ssize; i++)
             {
-                set.append(bs::get<FloatSetTraitParameters>(pms.m_Details).set[i].value);
-                probs.append(bs::get<FloatSetTraitParameters>(pms.m_Details).probs[i]);
+                set.append(std::get<FloatSetTraitParameters>(pms.m_Details).set[i].value);
+                probs.append(std::get<FloatSetTraitParameters>(pms.m_Details).probs[i]);
             }
 
             dt["set"] = set;
@@ -715,12 +715,12 @@ public:
         else if (pms.type == "pyobject")
         {
             t["type"] = "pyobject";
-            dt = bs::get<py::object>(pms.m_Details);
+            dt = std::get<py::object>(pms.m_Details);
         }
         else if (pms.type == "pyclassset")
         {
             t["type"] = "pyclassset";
-            dt = bs::get<py::object>(pms.m_Details);
+            dt = std::get<py::object>(pms.m_Details);
         }
 
         t["details"] = dt;

@@ -842,7 +842,7 @@ namespace NEAT
             {
                 try
                 {
-                    t_c.m_hebb_rate = boost::get<double>(m_LinkGenes[i].m_Traits.at("hebb_rate").value);
+                    t_c.m_hebb_rate = std::get<double>(m_LinkGenes[i].m_Traits.at("hebb_rate").value);
                 }
                 catch(const std::exception &e)
                 {
@@ -854,7 +854,7 @@ namespace NEAT
             {
                 try
                 {
-                    t_c.m_hebb_pre_rate = boost::get<double>(m_LinkGenes[i].m_Traits.at("hebb_pre_rate").value);
+                    t_c.m_hebb_pre_rate = std::get<double>(m_LinkGenes[i].m_Traits.at("hebb_pre_rate").value);
                 }
                 catch(const std::exception &e)
                 {
@@ -3469,7 +3469,7 @@ namespace NEAT
         {
             bool doit = false;
             std::string s = t->second.dep_key;
-            //std::string sv = bs::get<std::string>(t->second.dep_values);
+            //std::string sv = std::get<std::string>(t->second.dep_values);
             if (s != "")
             {
                 // there is such trait..
@@ -3477,19 +3477,19 @@ namespace NEAT
                 {
                     /*int a; double b; std::string c;
                     if ((*it).m_Traits[s].value.type() == typeid(int))
-                        a = bs::get<int>((*it).m_Traits[s].value);
+                        a = std::get<int>((*it).m_Traits[s].value);
                     if ((*it).m_Traits[s].value.type() == typeid(double))
-                        b = bs::get<double>((*it).m_Traits[s].value);
+                        b = std::get<double>((*it).m_Traits[s].value);
                     if ((*it).m_Traits[s].value.type() == typeid(std::string))
-                        c = bs::get<std::string>((*it).m_Traits[s].value);
+                        c = std::get<std::string>((*it).m_Traits[s].value);
 
                     int a1; double b1; std::string c1;
                     if ((t->second.dep_values).type() == typeid(int))
-                        a1 = bs::get<int>((t->second.dep_values));
+                        a1 = std::get<int>((t->second.dep_values));
                     if ((t->second.dep_values).type() == typeid(double))
-                        b1 = bs::get<double>((t->second.dep_values));
+                        b1 = std::get<double>((t->second.dep_values));
                     if ((t->second.dep_values).type() == typeid(std::string))
-                        c1 = bs::get<std::string>((t->second.dep_values));*/
+                        c1 = std::get<std::string>((t->second.dep_values));*/
                 
                     // and it has the right value?
                     for(long unsigned int ix=0; ix<t->second.dep_values.size(); ix++)
@@ -3510,25 +3510,25 @@ namespace NEAT
             if (doit)
             {
                 std::cout << t->first << " - ";
-                if (t->second.value.type() == typeid(int))
+                if (std::holds_alternative<int>(t->second.value))
                 {
-                    std::cout << bs::get<int>(t->second.value);
+                    std::cout << std::get<int>(t->second.value);
                 }
-                if (t->second.value.type() == typeid(double))
+                if (std::holds_alternative<double>(t->second.value))
                 {
-                    std::cout << bs::get<double>(t->second.value);
+                    std::cout << std::get<double>(t->second.value);
                 }
-                if (t->second.value.type() == typeid(std::string))
+                if (std::holds_alternative<std::string>(t->second.value))
                 {
-                    std::cout << "\"" << bs::get<std::string>(t->second.value) << "\"";
+                    std::cout << "\"" << std::get<std::string>(t->second.value) << "\"";
                 }
-                if (t->second.value.type() == typeid(intsetelement))
+                if (std::holds_alternative<intsetelement>(t->second.value))
                 {
-                    std::cout << (bs::get<intsetelement>(t->second.value)).value;
+                    std::cout << (std::get<intsetelement>(t->second.value)).value;
                 }
-                if (t->second.value.type() == typeid(floatsetelement))
+                if (std::holds_alternative<floatsetelement>(t->second.value))
                 {
-                    std::cout << (bs::get<floatsetelement>(t->second.value)).value;
+                    std::cout << (std::get<floatsetelement>(t->second.value)).value;
                 }
             
                 std::cout << ", ";
@@ -4153,29 +4153,29 @@ namespace NEAT
             if (doit)
             {
                 TraitType t = tit->second.value;
-                if (t.type() == typeid(int))
+                if (std::holds_alternative<int>(t))
                 {
-                    traits[tit->first] = bs::get<int>(t);
+                    traits[tit->first] = std::get<int>(t);
                 }
-                if (t.type() == typeid(double))
+                if (std::holds_alternative<double>(t))
                 {
-                    traits[tit->first] = bs::get<double>(t);
+                    traits[tit->first] = std::get<double>(t);
                 }
-                if (t.type() == typeid(std::string))
+                if (std::holds_alternative<std::string>(t))
                 {
-                    traits[tit->first] = bs::get<std::string>(t);
+                    traits[tit->first] = std::get<std::string>(t);
                 }
-                if (t.type() == typeid(intsetelement))
+                if (std::holds_alternative<intsetelement>(t))
                 {
-                    traits[tit->first] = (bs::get<intsetelement>(t)).value;
+                    traits[tit->first] = (std::get<intsetelement>(t)).value;
                 }
-                if (t.type() == typeid(floatsetelement))
+                if (std::holds_alternative<floatsetelement>(t))
                 {
-                    traits[tit->first] = (bs::get<floatsetelement>(t)).value;
+                    traits[tit->first] = (std::get<floatsetelement>(t)).value;
                 }
-                if (t.type() == typeid(py::object))
+                if (std::holds_alternative<py::object>(t))
                 {
-                    traits[tit->first] = bs::get<py::object>(t);
+                    traits[tit->first] = std::get<py::object>(t);
                 }
             }
         }
