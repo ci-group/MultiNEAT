@@ -5,4 +5,5 @@ requires = [
     "cmake>=3.22",
     "scikit-build>=0.13",
     "numpy>=1.22",
+    "pybind11>=2.9",
 ]
