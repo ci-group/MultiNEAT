@@ -1,10 +1,18 @@
-#!/usr/bin/env python
-from skbuild import setup
+import sys
 
+try:
+    from skbuild import setup
+except ImportError:
+    print(
+        "Please update pip, you need pip 10 or greater,\n"
+        " or you need to install the PEP 518 requirements in pyproject.toml yourself",
+        file=sys.stderr,
+    )
+    raise
 
-setup(name='multineat',
-      version='0.7',  # Update version in conda/meta.yaml as well
-      packages=['multineat'],
-      cmake_args=['-DGENERATE_PYTHON_BINDINGS:BOOL=ON', '-DCMAKE_BUILD_TYPE=Release'],
-      install_requires=['numpy'],
-      )
+setup(
+    name='multineat',
+    version='0.7',  # Update version in conda/meta.yaml as well
+    packages=['multineat'],
+    cmake_args=['-DGENERATE_PYTHON_BINDINGS:BOOL=ON', '-DCMAKE_BUILD_TYPE=Release'],
+)

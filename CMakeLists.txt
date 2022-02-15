@@ -21,14 +21,11 @@ endif()
 
 include(GNUInstallDirs)
 
-find_package(Threads REQUIRED)
-
 find_package(Boost
         COMPONENTS
         date_time
         system
         filesystem
-        serialization
         REQUIRED
         )
 
@@ -49,7 +46,6 @@ set(SOURCE_FILES
 
 
 set(Boost_USE_STATIC_LIBS       OFF) # only find static libs
-set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
 if (NOT SKBUILD)
@@ -69,8 +65,6 @@ if (NOT SKBUILD)
             Boost::date_time
             Boost::system
             Boost::filesystem
-            Boost::serialization
-            Threads::Threads
             )
 
     # INSTALL SECTION
@@ -275,7 +269,6 @@ if(GENERATE_PYTHON_BINDINGS)
             Boost::date_time
             Boost::system
             Boost::filesystem
-            Boost::serialization
 
             # Python3::Python # already included by default
             $<$<BOOL:${Boost_PYTHON${3}_FOUND}>:${Boost_PYTHON${3}_LIBRARY}>

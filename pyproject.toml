@@ -1,4 +1,8 @@
 [build-system]
-requires = ["setuptools", "wheel", "numpy",
-            "scikit-build", "cmake", "ninja"
-            ]
+requires = [
+    "setuptools>=60.9",
+    "wheel>=0.37",
+    "cmake>=3.22",
+    "scikit-build>=0.13",
+    "numpy>=1.22",
+]
