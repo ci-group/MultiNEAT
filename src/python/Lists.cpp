@@ -1,69 +1,47 @@
 //
 // Created by matteo on 6/7/20.
+// Edited by aart in 2022
 //
 
 #include "../Random.h"
-#include <boost/python.hpp>
-#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
 #include "../Genome.h"
 #include "../Species.h"
 #include "../NeuralNetwork.h"
+#include <pybind11/pybind11.h>
+#include <pybind11/stl_bind.h>
 
-void export_Lists()
-{
-    boost::python::class_< std::vector<double> >("DoublesList")
-            .def(boost::python::vector_indexing_suite< std::vector<double> >() )
-            ;
+using namespace NEAT;
 
-    boost::python::class_< std::vector< std::vector<double> > >("DoublesList2D")
-            .def(boost::python::vector_indexing_suite< std::vector< std::vector<double> > >() )
-            ;
+PYBIND11_MAKE_OPAQUE(std::vector<double>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<double>>);
+PYBIND11_MAKE_OPAQUE(std::vector<float>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<float>>);
+PYBIND11_MAKE_OPAQUE(std::vector<int>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<int>>);
+PYBIND11_MAKE_OPAQUE(std::vector<NEAT::Genome>);
+PYBIND11_MAKE_OPAQUE(std::vector<NEAT::Species>);
+PYBIND11_MAKE_OPAQUE(std::vector<NEAT::Neuron>);
+PYBIND11_MAKE_OPAQUE(std::vector<NEAT::Connection>);
+PYBIND11_MAKE_OPAQUE(std::vector<NEAT::NeuronGene>);
+PYBIND11_MAKE_OPAQUE(std::vector<NEAT::LinkGene>);
+PYBIND11_MAKE_OPAQUE(std::vector<NEAT::PhenotypeBehavior>);
 
-    boost::python::class_< std::vector<float> >("FloatsList")
-            .def(boost::python::vector_indexing_suite< std::vector<float> >() )
-            ;
-
-    boost::python::class_< std::vector< std::vector<float> > >("FloatsList2D")
-            .def(boost::python::vector_indexing_suite< std::vector< std::vector<float> > >() )
-            ;
-
-    boost::python::class_< std::vector<int> >("IntsList")
-            .def(boost::python::vector_indexing_suite< std::vector<int> >() )
-            ;
-
-    boost::python::class_< std::vector< std::vector<int> > >("IntsList2D")
-            .def(boost::python::vector_indexing_suite< std::vector< std::vector<int> > >() )
-            ;
-
+void export_Lists(pybind11::module_& mod) {
+    pybind11::bind_vector<std::vector<double>>(mod, "DoublesList");
+    pybind11::bind_vector<std::vector<std::vector<double>>>(mod, "DoublesList2");
+    pybind11::bind_vector<std::vector<float>>(mod, "FloatsList");
+    pybind11::bind_vector<std::vector<std::vector<float>>>(mod, "FloatsList2D");
+    pybind11::bind_vector<std::vector<int>>(mod, "IntsList");
+    pybind11::bind_vector<std::vector<std::vector<int>>>(mod, "IntsList2D");
     // These are necessary to let us iterate through the vectors of species, genomes and genes
-    boost::python::class_< std::vector<NEAT::Genome> >("GenomeList")
-            .def(boost::python::vector_indexing_suite< std::vector<NEAT::Genome> >() )
-            ;
-
-    boost::python::class_< std::vector<NEAT::Species> >("SpeciesList")
-            .def(boost::python::vector_indexing_suite< std::vector<NEAT::Species> >() )
-            ;
-
+    pybind11::bind_vector<std::vector<NEAT::Genome>>(mod, "GenomeList");
+    pybind11::bind_vector<std::vector<NEAT::Species>>(mod, "SpeciesList");
     // These are necessary to iterate through lists of Neurons and Connections
-    boost::python::class_< std::vector<NEAT::Neuron> >("NeuronList")
-            .def(boost::python::vector_indexing_suite< std::vector<NEAT::Neuron> >() )
-            ;
-
-    boost::python::class_< std::vector<NEAT::Connection> >("ConnectionList")
-            .def(boost::python::vector_indexing_suite< std::vector<NEAT::Connection> >() )
-            ;
-
-    boost::python::class_< std::vector<NEAT::NeuronGene> >("NeuronGeneList")
-            .def(boost::python::vector_indexing_suite< std::vector<NEAT::NeuronGene> >() )
-            ;
-
-    boost::python::class_< std::vector<NEAT::LinkGene> >("LinkGeneList")
-            .def(boost::python::vector_indexing_suite< std::vector<NEAT::LinkGene> >() )
-            ;
-
+    pybind11::bind_vector<std::vector<NEAT::Neuron>>(mod, "NeuronList");
+    pybind11::bind_vector<std::vector<NEAT::Connection>>(mod, "ConnectionList");
+    pybind11::bind_vector<std::vector<NEAT::NeuronGene>>(mod, "NeuronGeneList");
+    pybind11::bind_vector<std::vector<NEAT::LinkGene>>(mod, "LinkGeneList");
     // For dealing with Phenotype behaviors
-    boost::python::class_< std::vector<NEAT::PhenotypeBehavior> >("PhenotypeBehaviorList")
-            .def(boost::python::vector_indexing_suite< std::vector<NEAT::PhenotypeBehavior> >() )
-            ;
+    pybind11::bind_vector<std::vector<NEAT::PhenotypeBehavior>>(mod, "PhenotypeBehaviorList");
 }

@@ -27,17 +27,8 @@
 
 #include <vector>
 #include "NeuralNetwork.h"
-
-#ifdef USE_BOOST_PYTHON
-
-#include <boost/python.hpp>
 #include <cereal/cereal.hpp>
 #include <cereal/types/vector.hpp>
-#include <cereal/archives/json.hpp>
-
-namespace py = boost::python;
-
-#endif
 
 namespace NEAT
 {
@@ -97,17 +88,19 @@ public:
               std::vector< std::vector<double> >& a_hidden,
               std::vector< std::vector<double> >& a_outputs );
 
-#ifdef USE_BOOST_PYTHON
+#ifdef PYTHON_BINDINGS
               
     // Construct from 3 Python lists of tuples
-    Substrate(py::list a_inputs, py::list a_hidden, py::list a_outputs);
+    Substrate(pybind11::list a_inputs, pybind11::list a_hidden, pybind11::list a_outputs);
     
     // Same as the constructor, except it doesn't set any flags
-    void SetNeurons(py::list a_inputs, py::list a_hidden, py::list a_outputs);
+    void SetNeurons(pybind11::list a_inputs, pybind11::list a_hidden, pybind11::list a_outputs);
     
     // Sets a custom connectivity scheme
     // The neurons must be set before calling this 
-    void SetCustomConnectivity(py::list a_conns);
+    // aart: I have no idea what types are expected here
+    // we don't use this function so i'll remove it until we need it.
+    //void SetCustomConnectivity(pybind11::list a_conns);
 #endif
 
     // Sets a custom connectivity scheme
@@ -127,7 +120,7 @@ public:
     // Prints some info about itself
     void PrintInfo();
     
-#ifdef USE_BOOST_PYTHON
+#ifdef PYTHON_BINDINGS
     
     // Serialization
     template<class Archive>
@@ -160,39 +153,29 @@ public:
         ar & m_custom_conn_obeys_flags;
         ar & m_query_weights_only;
     }
-    
-#endif
 
-};
-
-#ifdef USE_BOOST_PYTHON
-
-struct Substrate_pickle_suite : py::pickle_suite
-{
-    static py::object getstate(const Substrate& a)
+    static std::string pickle_getstate(const Substrate& sub)
     {
         std::ostringstream os;
         {
             cereal::JSONOutputArchive oa(os);
-            oa << a;
+            oa << sub;
         }
-        return py::str(os.str());
+        return os.str();
     }
 
-    static void setstate(Substrate& a, py::object entries)
+    static Substrate pickle_setstate(std::string serialized)
     {
-        py::str s = py::extract<py::str> (entries)();
-        std::string st = py::extract<std::string> (s)();
-        std::istringstream is(st);
-
+        std::istringstream is(serialized);
         cereal::JSONInputArchive ia(is);
-        ia >> a;
+        Substrate sub;
+        ia >> sub;
+        return sub;
     }
     
-    //static bool getstate_manages_dict() { return true; }
-};
-
 #endif
+
+};
 
 }
 

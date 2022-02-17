@@ -32,15 +32,12 @@
 
 #include <map>
 #include "Traits.h"
-
-#ifdef USE_BOOST_PYTHON
-
-#include <boost/python.hpp>
 #include <cereal/cereal.hpp>
 #include <cereal/archives/json.hpp>
+#include <sstream>
 
-namespace py = boost::python;
-
+#ifdef PYTHON_BINDINGS
+    #include <pybind11/pybind11.h>
 #endif
 
 namespace NEAT
@@ -98,9 +95,9 @@ public:
     // Should return true if the genome FAILS to meet the constraints
     bool (*CustomConstraints)(Genome& g);
     
-#ifdef USE_BOOST_PYTHON
+#ifdef PYTHON_BINDINGS
     // same as above, but for Python
-    py::object pyCustomConstraints;
+    pybind11::object pyCustomConstraints;
 #endif
 
     /////////////////////////////
@@ -476,67 +473,47 @@ public:
     // resets the parameters to built-in defaults
     void Reset();
     
-#ifdef USE_BOOST_PYTHON
+#ifdef PYTHON_BINDINGS
 
-    TraitParameters TraitParamsFromDict(py::dict trait_params)
+    TraitParameters TraitParamsFromDict(pybind11::dict trait_params)
     {
         // create the trait parameters
         TraitParameters t;
-        t.m_ImportanceCoeff = py::extract<double>(trait_params["importance_coeff"]);
-        t.m_MutationProb = py::extract<double>(trait_params["mutation_prob"]);
-        t.type = py::extract<std::string>(trait_params["type"]);
-        if (trait_params.has_key("dep_key"))
+        t.m_ImportanceCoeff = trait_params["importance_coeff"].cast<double>();
+        t.m_MutationProb = trait_params["mutation_prob"].cast<double>();
+        t.type = trait_params["type"].cast<std::string>();
+        if (trait_params.contains("dep_key"))
         {
-            t.dep_key = py::extract<std::string>(trait_params["dep_key"]);
+            t.dep_key = trait_params["dep_key"].cast<std::string>();
             // infer the dep_values type from the value
-            py::object o = trait_params["dep_values"][0]; // needs to have at least one value
-            std::string st = py::extract<std::string>(o.attr("__class__").attr("__name__"));
+            pybind11::object o = trait_params["dep_values"][0]; // needs to have at least one value
+            std::string st = o.attr("__class__").attr("__name__").cast<std::string>();
 
-            py::list pydepvals = py::extract<py::list>(trait_params["dep_values"]);
+            pybind11::list pydepvals = trait_params["dep_values"].cast<pybind11::list>();
 
             if (st == "int")
             {
-                for(int ix=0; ix<py::len(pydepvals); ix++)
+                for(size_t ix=0; ix<pydepvals.size(); ix++)
                 {
-                    t.dep_values.push_back( py::extract<int>(pydepvals[ix]) );
+                    t.dep_values.push_back( pydepvals[ix].cast<int>() );
                 }
             }
             else
             if (st == "float")
             {
-                for(int ix=0; ix<py::len(pydepvals); ix++)
+                for(size_t ix=0; ix<pydepvals.size(); ix++)
                 {
-                    t.dep_values.push_back( py::extract<double>(pydepvals[ix]) );
+                    t.dep_values.push_back( pydepvals[ix].cast<double>() );
                 }
             }
             else
             if (st == "str")
             {
-                for(int ix=0; ix<py::len(pydepvals); ix++)
+                for(size_t ix=0; ix<pydepvals.size(); ix++)
                 {
-                    t.dep_values.push_back( py::extract<std::string>(pydepvals[ix]) );
+                    t.dep_values.push_back( pydepvals[ix].cast<std::string>() );
                 }
             }
-            /*if (st == "intset")
-            {
-                for(int ix=0; ix<py::len(pydepvals); ix++)
-                {
-                    intsetelement x;
-                    int m = py::extract<int>(pydepvals[ix]);
-                    x.value = m;
-                    t.dep_values.push_back( x );
-                }
-            }
-            if (st == "floatset")
-            {
-                for(int ix=0; ix<py::len(pydepvals); ix++)
-                {
-                    floatsetelement x;
-                    double m = py::extract<double>(pydepvals[ix]);
-                    x.value = m;
-                    t.dep_values.push_back( x );
-                }
-            }*/
             else
             {
                 throw std::runtime_error("Unknown trait type");
@@ -546,37 +523,37 @@ public:
         if (t.type == "int")
         {
             IntTraitParameters itp;
-            py::dict details = py::extract<py::dict>(trait_params["details"]);
-            itp.min = py::extract<int>(details["min"]);
-            itp.max = py::extract<int>(details["max"]);
-            itp.mut_power = py::extract<int>(details["mut_power"]);
-            itp.mut_replace_prob = py::extract<double>(details["mut_replace_prob"]);
+            pybind11::dict details = trait_params["details"].cast<pybind11::dict>();
+            itp.min = details["min"].cast<int>();
+            itp.max = details["max"].cast<int>();
+            itp.mut_power = details["mut_power"].cast<int>();
+            itp.mut_replace_prob = details["mut_replace_prob"].cast<double>();
             t.m_Details = itp;
         }
         else if (t.type == "float")
         {
             FloatTraitParameters itp;
-            py::dict details = py::extract<py::dict>(trait_params["details"]);
-            itp.min = py::extract<double>(details["min"]);
-            itp.max = py::extract<double>(details["max"]);
-            itp.mut_power = py::extract<double>(details["mut_power"]);
-            itp.mut_replace_prob = py::extract<double>(details["mut_replace_prob"]);
+            pybind11::dict details = trait_params["details"].cast<pybind11::dict>();
+            itp.min = details["min"].cast<double>();
+            itp.max = details["max"].cast<double>();
+            itp.mut_power = details["mut_power"].cast<double>();
+            itp.mut_replace_prob = details["mut_replace_prob"].cast<double>();
             t.m_Details = itp;
         }
         else if (t.type == "str")
         {
             StringTraitParameters itp;
-            py::dict details = py::extract<py::dict>(trait_params["details"]);
-            py::list set = py::extract<py::list>(details["set"]);
-            py::list probs = py::extract<py::list>(details["probs"]);
-            for(int i=0; i<py::len(set); i++)
+            pybind11::dict details = trait_params["details"].cast<pybind11::dict>();
+            pybind11::list set = details["set"].cast<pybind11::list>();
+            pybind11::list probs = details["probs"].cast<pybind11::list>();
+            for(size_t i=0; i<set.size(); i++)
             {
-                std::string s = py::extract<std::string>(set[i]);
+                std::string s = set[i].cast<std::string>();
                 itp.set.push_back(s);
             }
-            for(int i=0; i<py::len(probs); i++)
+            for(size_t i=0; i<probs.size(); i++)
             {
-                double d = py::extract<double>(probs[i]);
+                double d = probs[i].cast<double>();
                 itp.probs.push_back(d);
             }
             t.m_Details = itp;
@@ -584,19 +561,19 @@ public:
         else if (t.type == "intset")
         {
             IntSetTraitParameters itp;
-            py::dict details = py::extract<py::dict>(trait_params["details"]);
-            py::list set = py::extract<py::list>(details["set"]);
-            py::list probs = py::extract<py::list>(details["probs"]);
-            for(int i=0; i<py::len(set); i++)
+            pybind11::dict details = trait_params["details"].cast<pybind11::list>();
+            pybind11::list set = details["set"].cast<pybind11::list>();
+            pybind11::list probs = details["probs"].cast<pybind11::list>();
+            for(size_t i=0; i<set.size(); i++)
             {
-                int x = py::extract<int>(set[i]);
+                int x = set[i].cast<int>();
                 intsetelement ise;
                 ise.value = x;
                 itp.set.push_back(ise);
             }
-            for(int i=0; i<py::len(probs); i++)
+            for(size_t i=0; i<probs.size(); i++)
             {
-                double d = py::extract<double>(probs[i]);
+                double d = probs[i].cast<double>();
                 itp.probs.push_back(d);
             }
             t.m_Details = itp;
@@ -604,46 +581,46 @@ public:
         else if (t.type == "floatset")
         {
             FloatSetTraitParameters itp;
-            py::dict details = py::extract<py::dict>(trait_params["details"]);
-            py::list set = py::extract<py::list>(details["set"]);
-            py::list probs = py::extract<py::list>(details["probs"]);
-            for(int i=0; i<py::len(set); i++)
+            pybind11::dict details = trait_params["details"].cast<pybind11::dict>();
+            pybind11::list set = details["set"].cast<pybind11::list>();
+            pybind11::list probs = details["probs"].cast<pybind11::list>();
+            for(size_t i=0; i<set.size(); i++)
             {
-                double x = py::extract<double>(set[i]);
+                double x = set[i].cast<double>();
                 floatsetelement ise;
                 ise.value = x;
                 itp.set.push_back(ise);
             }
-            for(int i=0; i<py::len(probs); i++)
+            for(size_t i=0; i<probs.size(); i++)
             {
-                double d = py::extract<double>(probs[i]);
+                double d = probs[i].cast<double>();
                 itp.probs.push_back(d);
             }
             t.m_Details = itp;
         }
         else if (t.type == "pyobject")
         {
-            py::object itp = py::extract<py::object>(trait_params["details"]);
+            pybind11::object itp = trait_params["details"].cast<pybind11::object>();
             t.m_Details = itp;
         }
         else if (t.type == "pyclassset")
         {
-            py::object itp = py::extract<py::object>(trait_params["details"]);
+            pybind11::object itp = trait_params["details"].cast<pybind11::object>();
             t.m_Details = itp;
         }
 
         return t;
     }
     
-    py::dict DictFromTraitParams(TraitParameters& pms)
+    pybind11::dict DictFromTraitParams(TraitParameters& pms)
     {
-        py::dict t;
+        pybind11::dict t;
         t["importance_coeff"] = pms.m_ImportanceCoeff;
         t["mutation_prob"] = pms.m_MutationProb;
-        py::object dt;
+        pybind11::object dt;
         if (pms.type == "int")
         {
-            dt = py::dict();
+            dt = pybind11::dict();
 
             t["type"] = "int";
             dt["min"] = std::get<IntTraitParameters>(pms.m_Details).min;
@@ -653,7 +630,7 @@ public:
         }
         else if (pms.type == "float")
         {
-            dt = py::dict();
+            dt = pybind11::dict();
 
             t["type"] = "float";
             dt["min"] = std::get<FloatTraitParameters>(pms.m_Details).min;
@@ -663,11 +640,11 @@ public:
         }
         else if (pms.type == "str")
         {
-            dt = py::dict();
+            dt = pybind11::dict();
 
             t["type"] = "str";
-            py::list set;
-            py::list probs;
+            pybind11::list set;
+            pybind11::list probs;
             int ssize = std::get<StringTraitParameters>(pms.m_Details).set.size();
             for(int i=0; i<ssize; i++)
             {
@@ -680,11 +657,11 @@ public:
         }
         else if (pms.type == "intset")
         {
-            dt = py::dict();
+            dt = pybind11::dict();
 
             t["type"] = "intset";
-            py::list set;
-            py::list probs;
+            pybind11::list set;
+            pybind11::list probs;
             int ssize = std::get<IntSetTraitParameters>(pms.m_Details).set.size();
             for(int i=0; i<ssize; i++)
             {
@@ -697,11 +674,11 @@ public:
         }
         else if (pms.type == "floatset")
         {
-            dt = py::dict();
+            dt = pybind11::dict();
 
             t["type"] = "floatset";
-            py::list set;
-            py::list probs;
+            pybind11::list set;
+            pybind11::list probs;
             int ssize = std::get<FloatSetTraitParameters>(pms.m_Details).set.size();
             for(int i=0; i<ssize; i++)
             {
@@ -715,12 +692,12 @@ public:
         else if (pms.type == "pyobject")
         {
             t["type"] = "pyobject";
-            dt = std::get<py::object>(pms.m_Details);
+            dt = std::get<pybind11::object>(pms.m_Details);
         }
         else if (pms.type == "pyclassset")
         {
             t["type"] = "pyclassset";
-            dt = std::get<py::object>(pms.m_Details);
+            dt = std::get<pybind11::object>(pms.m_Details);
         }
 
         t["details"] = dt;
@@ -728,24 +705,24 @@ public:
         return t;
     }
 
-    void SetNeuronTraitParameters(std::string name, py::dict trait_params)
+    void SetNeuronTraitParameters(std::string name, pybind11::dict trait_params)
     {
         NeuronTraits[name] = TraitParamsFromDict(trait_params);
     }
 
-    void SetLinkTraitParameters(std::string name, py::dict trait_params)
+    void SetLinkTraitParameters(std::string name, pybind11::dict trait_params)
     {
         LinkTraits[name] = TraitParamsFromDict(trait_params);
     }
     
-    void SetGenomeTraitParameters(std::string name, py::dict trait_params)
+    void SetGenomeTraitParameters(std::string name, pybind11::dict trait_params)
     {
         GenomeTraits[name] = TraitParamsFromDict(trait_params);
     }
     
-    py::list ListNeuronTraitParameters()
+    pybind11::list ListNeuronTraitParameters()
     {
-        py::list l;
+        pybind11::list l;
         for(auto it=NeuronTraits.begin(); it!=NeuronTraits.end(); it++)
         {
             l.append(it->first);
@@ -753,9 +730,9 @@ public:
         return l;
     }
 
-    py::list ListLinkTraitParameters()
+    pybind11::list ListLinkTraitParameters()
     {
-        py::list l;
+        pybind11::list l;
         for(auto it=LinkTraits.begin(); it!=LinkTraits.end(); it++)
         {
             l.append(it->first);
@@ -763,9 +740,9 @@ public:
         return l;
     }
     
-    py::list ListGenomeTraitParameters()
+    pybind11::list ListGenomeTraitParameters()
     {
-        py::list l;
+        pybind11::list l;
         for(auto it=GenomeTraits.begin(); it!=GenomeTraits.end(); it++)
         {
             l.append(it->first);
@@ -788,7 +765,7 @@ public:
         GenomeTraits.clear();
     }
     
-    py::dict GetNeuronTraitParameters(std::string name)
+    pybind11::dict GetNeuronTraitParameters(std::string name)
     {
         if (NeuronTraits.count(name) == 0)
         {
@@ -798,7 +775,7 @@ public:
         return DictFromTraitParams(NeuronTraits[name]);
     }
 
-    py::dict GetLinkTraitParameters(std::string name)
+    pybind11::dict GetLinkTraitParameters(std::string name)
     {
         if (LinkTraits.count(name) == 0)
         {
@@ -808,7 +785,7 @@ public:
         return DictFromTraitParams(LinkTraits[name]);
     }
     
-    py::dict GetGenomeTraitParameters(std::string name)
+    pybind11::dict GetGenomeTraitParameters(std::string name)
     {
         if (GenomeTraits.count(name) == 0)
         {
@@ -950,41 +927,29 @@ public:
 
         ar & ArchiveEnforcement;
     }
-    
-#endif
 
-};
-
-
-#ifdef USE_BOOST_PYTHON
-
-struct Parameters_pickle_suite : py::pickle_suite
-{
-    static py::object getstate(const Parameters& a)
+    static std::string pickle_getstate(const Parameters& params)
     {
         std::ostringstream os;
         {
             cereal::JSONOutputArchive oa(os);
-            oa << a;
+            oa << params;
         }
-        return py::str(os.str());
+        return os.str();
     }
 
-    static void setstate(Parameters& a, py::object entries)
+    static Parameters pickle_setstate(std::string serialized)
     {
-        py::str s = py::extract<py::str> (entries)();
-        std::string st = py::extract<std::string> (s)();
-        std::istringstream is(st);
-
+        std::istringstream is(serialized);
         cereal::JSONInputArchive ia(is);
-        ia >> a;
+        Parameters params;
+        ia >> params;
+        return params;
     }
     
-    static bool getstate_manages_dict() { return true; }
-};
-
 #endif
 
+};
 
 } // namespace NEAT
 

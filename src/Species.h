@@ -128,7 +128,7 @@ public:
     // assignment operator
     Species& operator=(const Species& a_g);
 
-    // comparison operator (nessesary for boost::python)
+    // comparison operator (nessesary for python bindings)
     // todo: implement a better comparison technique
     bool operator==(Species const& other) const { return m_ID == other.m_ID; }
 

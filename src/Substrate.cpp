@@ -84,10 +84,10 @@ Substrate::Substrate(std::vector<std::vector<double> >& a_inputs,
 }
 
 
-#ifdef USE_BOOST_PYTHON
+#ifdef PYTHON_BINDINGS
 
 // 3 lists of iterables of floats
-Substrate::Substrate(py::list a_inputs, py::list a_hidden, py::list a_outputs)
+Substrate::Substrate(pybind11::list a_inputs, pybind11::list a_hidden, pybind11::list a_outputs)
 {
     m_leaky = false;
     m_with_distance = false;
@@ -109,80 +109,88 @@ Substrate::Substrate(py::list a_inputs, py::list a_hidden, py::list a_outputs)
     m_query_weights_only = false;
 
     // Make room for the data
-    int inp = py::len(a_inputs);
-    int hid = py::len(a_hidden);
-    int out = py::len(a_outputs);
+    int inp = a_inputs.size();
+    int hid = a_hidden.size();
+    int out = a_outputs.size();
     m_input_coords.resize( inp );
     m_hidden_coords.resize( hid );
     m_output_coords.resize( out );
 
     for(int i=0; i<inp; i++)
     {
-        for(int j=0; j<py::len(a_inputs[i]); j++)
-            m_input_coords[i].push_back(py::extract<double>(a_inputs[i][j]));
+        for(auto value : a_inputs[i].cast<pybind11::iterator>())
+        {
+            m_input_coords[i].push_back(value.cast<float>());
+        }
     }
     for(int i=0; i<hid; i++)
     {
-        for(int j=0; j<py::len(a_hidden[i]); j++)
-            m_hidden_coords[i].push_back(py::extract<double>(a_hidden[i][j]));
+        for(auto value : a_hidden[i].cast<pybind11::iterator>())
+        {
+            m_hidden_coords[i].push_back(value.cast<float>());
+        }
     }
     for(int i=0; i<out; i++)
     {
-        for(int j=0; j<py::len(a_outputs[i]); j++)
-            m_output_coords[i].push_back(py::extract<double>(a_outputs[i][j]));
+        for(auto value : a_outputs[i].cast<pybind11::iterator>())
+        {
+            m_output_coords[i].push_back(value.cast<float>());
+        }
     }
 }
 
 
-void Substrate::SetNeurons(py::list a_inputs, py::list a_hidden, py::list a_outputs)
+void Substrate::SetNeurons(pybind11::list a_inputs, pybind11::list a_hidden, pybind11::list a_outputs)
 {
     m_input_coords.clear();
     m_hidden_coords.clear();
     m_output_coords.clear();
 
     // Make room for the data
-    int inp = py::len(a_inputs);
-    int hid = py::len(a_hidden);
-    int out = py::len(a_outputs);
+    int inp = pybind11::len(a_inputs);
+    int hid = pybind11::len(a_hidden);
+    int out = pybind11::len(a_outputs);
     m_input_coords.resize( inp );
     m_hidden_coords.resize( hid );
     m_output_coords.resize( out );
 
     for(int i=0; i<inp; i++)
     {
-        for(int j=0; j<py::len(a_inputs[i]); j++)
+        for(auto value : a_inputs[i].cast<pybind11::iterator>())
         {
-            m_input_coords[i].push_back(py::extract<double>(a_inputs[i][j]));
+            m_input_coords[i].push_back(value.cast<float>());
         }
     }
     for(int i=0; i<hid; i++)
     {
-        for(int j=0; j<py::len(a_hidden[i]); j++)
+        for(auto value : a_hidden[i].cast<pybind11::iterator>())
         {
-            m_hidden_coords[i].push_back(py::extract<double>(a_hidden[i][j]));
+            m_hidden_coords[i].push_back(value.cast<float>());
         }
     }
     for(int i=0; i<out; i++)
     {
-        for(int j=0; j<py::len(a_outputs[i]); j++)
+        for(auto value : a_outputs[i].cast<pybind11::iterator>())
         {
-            m_output_coords[i].push_back(py::extract<double>(a_outputs[i][j]));
+            m_output_coords[i].push_back(value.cast<float>());
         }
     }
 }
 
-
-void Substrate::SetCustomConnectivity(py::list a_conns)
+/*
+aart: I have no idea what types are expected here
+we don't use this function so i'll remove it until we need it.
+void Substrate::SetCustomConnectivity(boost::python::list a_conns)
 {
-    int num_conns = py::len(a_conns);
+    int num_conns = boost::python::len(a_conns);
     m_custom_connectivity.clear();
 
     for(int i=0; i<num_conns; i++)
     {
-    	NeuronType src_type = py::extract<NeuronType>(a_conns[i][0]);
-    	int src_idx = py::extract<int>(a_conns[i][1]);
-    	NeuronType dst_type = py::extract<NeuronType>(a_conns[i][2]);
-    	int dst_idx = py::extract<int>(a_conns[i][3]);
+    	NeuronType src_type = boost::python::extract<NeuronType>(a_conns[i][0]);
+    	int src_idx = boost::python::extract<int>(a_conns[i][1]);
+    	NeuronType dst_type = boost::python::extract<NeuronType>(a_conns[i][2]);
+    	int dst_idx = boost::python::extract<int>(a_conns[i][3]);
 
     	std::vector<int> c;
     	c.push_back(src_type);
@@ -193,6 +201,7 @@ void Substrate::SetCustomConnectivity(py::list a_conns)
     	m_custom_connectivity.push_back( c );
     }
 }
+*/
 
 #endif
 

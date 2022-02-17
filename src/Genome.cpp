@@ -123,7 +123,7 @@ namespace NEAT
         m_PhenotypeBehavior = a_G.m_PhenotypeBehavior;
         m_initial_num_neurons = a_G.m_initial_num_neurons;
         m_initial_num_links = a_G.m_initial_num_links;
-#ifdef USE_BOOST_PYTHON
+#ifdef PYTHON_BINDINGS
         m_behavior = a_G.m_behavior;
 #endif
     }
@@ -149,7 +149,7 @@ namespace NEAT
             m_PhenotypeBehavior = a_G.m_PhenotypeBehavior;
             m_initial_num_neurons = a_G.m_initial_num_neurons;
             m_initial_num_links = a_G.m_initial_num_links;
-#ifdef USE_BOOST_PYTHON
+#ifdef PYTHON_BINDINGS
             m_behavior = a_G.m_behavior;
 #endif
         }
@@ -4108,10 +4108,10 @@ namespace NEAT
         }
     }
 
-#ifdef USE_BOOST_PYTHON
-    py::dict Genome::TraitMap2Dict(const std::map< std::string, Trait>& tmap) const
+#ifdef PYTHON_BINDINGS
+    pybind11::dict Genome::TraitMap2Dict(const std::map< std::string, Trait>& tmap) const
     {
-        py::dict traits;
+        pybind11::dict traits;
         for(auto tit=tmap.begin(); tit!=tmap.end(); tit++)
         {
             bool doit = false;
@@ -4141,27 +4141,27 @@ namespace NEAT
                 TraitType t = tit->second.value;
                 if (std::holds_alternative<int>(t))
                 {
-                    traits[tit->first] = std::get<int>(t);
+                    traits[tit->first.c_str()] = std::get<int>(t);
                 }
                 if (std::holds_alternative<double>(t))
                 {
-                    traits[tit->first] = std::get<double>(t);
+                    traits[tit->first.c_str()] = std::get<double>(t);
                 }
                 if (std::holds_alternative<std::string>(t))
                 {
-                    traits[tit->first] = std::get<std::string>(t);
+                    traits[tit->first.c_str()] = std::get<std::string>(t);
                 }
                 if (std::holds_alternative<intsetelement>(t))
                 {
-                    traits[tit->first] = (std::get<intsetelement>(t)).value;
+                    traits[tit->first.c_str()] = (std::get<intsetelement>(t)).value;
                 }
                 if (std::holds_alternative<floatsetelement>(t))
                 {
-                    traits[tit->first] = (std::get<floatsetelement>(t)).value;
+                    traits[tit->first.c_str()] = (std::get<floatsetelement>(t)).value;
                 }
-                if (std::holds_alternative<py::object>(t))
+                if (std::holds_alternative<pybind11::object>(t))
                 {
-                    traits[tit->first] = std::get<py::object>(t);
+                    traits[tit->first.c_str()] = std::get<pybind11::object>(t);
                 }
             }
         }
@@ -4169,15 +4169,15 @@ namespace NEAT
         return traits;
     }
 
-    py::object Genome::GetNeuronTraits() const
+    pybind11::object Genome::GetNeuronTraits() const
     {
-        py::list neurons;
+        pybind11::list neurons;
         for(auto it=m_NeuronGenes.begin(); it != m_NeuronGenes.end(); it++)
         {
 
-            py::dict traits = TraitMap2Dict((*it).m_Traits);
+            pybind11::dict traits = TraitMap2Dict((*it).m_Traits);
 
-            py::list little;
+            pybind11::list little;
             little.append( (*it).ID() );
 
             if ((*it).Type() == INPUT)
@@ -4203,15 +4203,15 @@ namespace NEAT
         return neurons;
     }
 
-    py::object Genome::GetLinkTraits(bool with_weights) const
+    pybind11::object Genome::GetLinkTraits(bool with_weights) const
     {
-        py::list links;
+        pybind11::list links;
     //            for(auto it=m_LinkGenes.begin(); it != m_LinkGenes.end(); it++)
         for(const LinkGene &linkGene: m_LinkGenes)
         {
-            py::dict traits = TraitMap2Dict(linkGene.m_Traits);
+            pybind11::dict traits = TraitMap2Dict(linkGene.m_Traits);
 
-            py::list little;
+            pybind11::list little;
             little.append(linkGene.FromNeuronID());
             little.append(linkGene.ToNeuronID());
             little.append(traits);

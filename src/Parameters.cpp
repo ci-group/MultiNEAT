@@ -485,7 +485,7 @@ namespace NEAT
         , ArchiveEnforcement(false)
         , NormalizeGenomeSize(true)
         , CustomConstraints(nullptr)
-#ifdef USE_BOOST_PYTHON
+#ifdef PYTHON_BINDINGS
         // same as above, but for Python
         , pyCustomConstraints()
 #endif

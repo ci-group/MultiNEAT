@@ -3,6 +3,8 @@
  *
  *  Created on: Jun 26, 2012
  *      Author: peter
+ * 
+ *  Edited in 2021 by Aart
  */
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -29,132 +31,96 @@
 //    Shane Ryan < shane.mcdonald.ryan@gmail.com >
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef USE_BOOST_PYTHON
+#include <pybind11/pybind11.h>
 
-#include <boost/python.hpp>
+void export_NeuronType(pybind11::module_& mod);
+void export_ActivationFunction(pybind11::module_& mod);
+void export_SearchMode(pybind11::module_& mod);
+void export_RNG(pybind11::module_& mod);
+void export_Connection(pybind11::module_& mod);
+void export_Neuron(pybind11::module_& mod);
+void export_NeuralNetwork(pybind11::module_& mod);
+void export_LinkGene(pybind11::module_& mod);
+void export_NeuronGene(pybind11::module_& mod);
+void export_Genome(pybind11::module_& mod);
+void export_Species(pybind11::module_& mod);
+void export_Substrate(pybind11::module_& mod);
+void export_PhenotypeBehaviour(pybind11::module_& mod);
+void export_Population(pybind11::module_& mod);
+void export_Innovation(pybind11::module_& mod);
+void export_InnovationDatabase(pybind11::module_& mod);
+void export_Parameters(pybind11::module_& mod);
+void export_Lists(pybind11::module_& mod);
 
-#include <boost/version.hpp>
-#if BOOST_VERSION < 106500
-    #include <boost/python/numeric.hpp>
-#else
-    #include <boost/python/numpy.hpp>
-#endif
-
-#include <boost/python/tuple.hpp>
-
-//#include "../NeuralNetwork.h"
-//#include "../Genome.h"
-
-namespace py = boost::python;
-//using namespace NEAT;
-using namespace py;
-
-#if BOOST_VERSION < 106500
-    typedef typename numeric::array pyndarray;
-#else
-    typedef typename numpy::ndarray pyndarray;
-#endif
-
-void export_NeuronType();
-void export_ActivationFunction();
-void export_SearchMode();
-void export_RNG();
-void export_Connection();
-void export_Neuron();
-void export_NeuralNetwork();
-void export_LinkGene();
-void export_NeuronGene();
-void export_Genome();
-void export_Species();
-void export_Substrate();
-void export_PhenotypeBehavior();
-void export_Population();
-void export_Innovation();
-void export_InnovationDatabase();
-void export_Parameters();
-void export_Lists();
-
-BOOST_PYTHON_MODULE(_multineat)
+PYBIND11_MODULE(_multineat, mod)
 {
-    Py_Initialize();
-
-    #if BOOST_VERSION < 106500
-        numeric::array::set_module_and_type("numpy", "ndarray");
-    #else
-        boost::python::numpy::initialize();
-        PyErr_Print(); // Print possible error from initialize call as otherwise it will crash if another error occurs
-        // On MacOS with 'ImportError: numpy.core.umath failed to import' error is produced, but NEAT still works
-    #endif
-
 ///////////////////////////////////////////////////////////////////
 // Enums
 ///////////////////////////////////////////////////////////////////
 
-    export_NeuronType();
-    export_ActivationFunction();
-    export_SearchMode();
+    export_NeuronType(mod);
+    export_ActivationFunction(mod);
+    export_SearchMode(mod);
 
 ///////////////////////////////////////////////////////////////////
 // RNG class
 ///////////////////////////////////////////////////////////////////
-    export_RNG();
+    export_RNG(mod);
 
 ///////////////////////////////////////////////////////////////////
 // Neural Network class
 ///////////////////////////////////////////////////////////////////
 
-    export_Connection();
-    export_Neuron();
-    export_NeuralNetwork();
+    export_Connection(mod);
+    export_Neuron(mod);
+    export_NeuralNetwork(mod);
 
 ///////////////////////////////////////////////////////////////////
 // Genome class
 ///////////////////////////////////////////////////////////////////
 
-    export_LinkGene();
-    export_NeuronGene();
-    export_Genome();
+    export_LinkGene(mod);
+    export_NeuronGene(mod);
+    export_Genome(mod);
 
 ///////////////////////////////////////////////////////////////////
 // Species class
 ///////////////////////////////////////////////////////////////////
 
-    export_Species();
+    export_Species(mod);
 
 ///////////////////////////////////////////////////////////////////
 // Substrate class
 ///////////////////////////////////////////////////////////////////
 
-    export_Substrate();
+    export_Substrate(mod);
 
 ///////////////////////////////////////////////////////////////////
 // PhenotypeBehavior class
 ///////////////////////////////////////////////////////////////////
 
-    export_PhenotypeBehavior();
+    export_PhenotypeBehaviour(mod);
 
 ///////////////////////////////////////////////////////////////////
 // Population class
 ///////////////////////////////////////////////////////////////////
 
-    export_Population();
+    export_Population(mod);
 
-    export_Innovation();
+    export_Innovation(mod);
 
-    export_InnovationDatabase();
+    export_InnovationDatabase(mod);
 
 ///////////////////////////////////////////////////////////////////
 // Parameters class
 ///////////////////////////////////////////////////////////////////
 
-    export_Parameters();
+    export_Parameters(mod);
 
 /////////////////////////////////////////////////////////
 // General stuff applicable across the entire module
 /////////////////////////////////////////////////////////
 
-    export_Lists();
+    export_Lists(mod);
 
 }
-
-#endif // USE_BOOST_PYTHON

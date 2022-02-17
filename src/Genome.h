@@ -30,12 +30,6 @@
 // Description: Definition for the Genome class.
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifdef USE_BOOST_PYTHON
-
-#include <boost/python.hpp>
-
-#endif
-
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/topological_sort.hpp>
@@ -158,8 +152,8 @@ namespace NEAT
         // Used in novelty searches
         PhenotypeBehavior *m_PhenotypeBehavior;
         // A Python object behavior
-#ifdef USE_BOOST_PYTHON
-        py::object m_behavior;
+#ifdef PYTHON_BINDINGS
+        pybind11::object m_behavior;
 #endif
 
         ////////////////////////////
@@ -174,7 +168,7 @@ namespace NEAT
         // assignment operator
         Genome &operator=(const Genome &a_g);
 
-        // comparison operator (nessesary for boost::python)
+        // comparison operator (nessesary for python bindings)
         // todo: implement a better comparison technique
         bool operator==(Genome const &other) const
         {
@@ -298,10 +292,10 @@ namespace NEAT
             }
 
             // for Python-based custom constraint callbacks
-#ifdef USE_BOOST_PYTHON
-            if (a_Parameters.pyCustomConstraints.ptr() != py::object().ptr()) // is it not None?
+#ifdef PYTHON_BINDINGS
+            if (a_Parameters.pyCustomConstraints.ptr() != pybind11::object().ptr()) // is it not None?
             {
-                return py::extract<bool>(a_Parameters.pyCustomConstraints(*this));
+                return a_Parameters.pyCustomConstraints(*this).cast<bool>();
             }
 #endif
             // add more constraints here
@@ -324,15 +318,15 @@ namespace NEAT
         ////////////
         void BuildHyperNEATPhenotype(NeuralNetwork &net, Substrate &subst);
 
-#ifdef USE_BOOST_PYTHON
+#ifdef PYTHON_BINDINGS
 
-        py::dict TraitMap2Dict(const std::map< std::string, Trait>& tmap) const;
+        pybind11::dict TraitMap2Dict(const std::map< std::string, Trait>& tmap) const;
 
-        py::object GetNeuronTraits() const;
+        pybind11::object GetNeuronTraits() const;
 
-        py::object GetLinkTraits(bool with_weights=false) const;
+        pybind11::object GetLinkTraits(bool with_weights=false) const;
 
-        py::dict GetGenomeTraits()
+        pybind11::dict GetGenomeTraits()
         {
             return TraitMap2Dict(m_GenomeGene.m_Traits);
         }
@@ -685,26 +679,21 @@ namespace NEAT
             ia >> *this;
         }
 
-    };
-
-#ifdef USE_BOOST_PYTHON
-
-    struct Genome_pickle_suite : py::pickle_suite
-    {
-        static py::object getstate(const Genome& a)
+#ifdef PYTHON_BINDINGS
+        static std::string pickle_getstate(const Genome& a)
         {
-            return py::str(a.Serialize());
+            return a.Serialize();
         }
 
-        static void setstate(Genome& a, py::object entries)
+        static Genome pickle_setstate(std::string a)
         {
-            py::str s = py::extract<py::str> (entries)();
-            std::string st = py::extract<std::string> (s)();
-            a.Deserialize(st);
+            Genome genome;
+            genome.Deserialize(a);
+            return genome;
         }
-    };
-
 #endif
+
+    };
 
 } // namespace NEAT
 

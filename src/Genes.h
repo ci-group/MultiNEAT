@@ -30,14 +30,6 @@
 // Description: Definitions for the Neuron and Link gene classes.
 /////////////////////////////////////////////////////////////////
 
-#ifdef USE_BOOST_PYTHON
-
-#include <boost/python.hpp>
-
-namespace py = boost::python;
-
-#endif
-
 #include <iostream>
 #include <vector>
 #include <map>
@@ -167,35 +159,42 @@ namespace NEAT
                     int idx = a_RNG.Roulette(probs);
                     t = itp.set[idx];
                 }
-#ifdef USE_BOOST_PYTHON
+#ifdef PYTHON_BINDINGS
                 else if (it->second.type == "pyobject")
                 {
-                    py::object itp = std::get<py::object>(it->second.m_Details);
+                    pybind11::object itp = std::get<pybind11::object>(it->second.m_Details);
                     t = itp(); // details is a function that returns a random instance of the trait
                 }
                 else if (it->second.type == "pyclassset")
                 {
-                    py::object tup = std::get<py::object>(it->second.m_Details);
-                    py::list classlist = py::extract<py::list>(tup[0]);
-                    py::list probs = py::extract<py::list>(tup[1]);
+                    throw std::runtime_error("Unimplemented");
+                    /*
+                    TODO
+                    I don't understand this code so just remove until we actually need it
+                    --Aart 15 02 2022
+
+                    pybind11::object tup = std::get<pybind11::object>(it->second.m_Details);
+                    pybind11::list classlist = tup[0].cast<pybind11::list>();
+                    pybind11::list probs = tup[1].cast<pybind11::list>();
                     std::vector<double> dprobs;
 
                     // get the probs
-                    int ln = py::len(probs);
-                    if ((ln == 0) || (py::len(classlist) == 0))
+                    size_t ln = probs.size();
+                    if ((ln == 0) || (classlist.size() == 0))
                     {
                         throw std::runtime_error("Empty class or probs list");
                     }
 
-                    for (int i=0; i<ln; i++)
+                    for (size_t i=0; i<ln; i++)
                     {
-                        dprobs.push_back(py::extract<double>(probs[i]));
+                        dprobs.push_back(probs[i].cast<double>());
                     }
 
                     // instantiate random class
                     int idx = a_RNG.Roulette(dprobs);
-                    py::object itp = py::extract<py::object>(classlist[idx]);
+                    pybind11::object itp = classlist[idx].cast<pybind11::object>();
                     t = itp();
+                    */ 
                 }
 #endif
 
@@ -222,11 +221,11 @@ namespace NEAT
                 }
 
                 // if generic python object, forward all processing to its method
-#ifdef USE_BOOST_PYTHON
-                if (std::holds_alternative<py::object>(mine))
+#ifdef PYTHON_BINDINGS
+                if (std::holds_alternative<pybind11::object>(mine))
                 {
                     // call mating function
-                    m_Traits[it->first].value = std::get<py::object>(mine).attr("mate")(std::get<py::object>(yours));
+                    m_Traits[it->first].value = std::get<pybind11::object>(mine).attr("mate")(std::get<pybind11::object>(yours));
                 }
                 else
 #endif
@@ -414,10 +413,10 @@ namespace NEAT
                         m_Traits[it->first].value = itp.set[idx];
                         did_mutate = true;
                     }
-#ifdef USE_BOOST_PYTHON
+#ifdef PYTHON_BINDINGS
                     else if ((it->second.type == "pyobject") || (it->second.type == "pyclassset"))
                     {
-                        m_Traits[it->first].value = std::get<py::object>(m_Traits[it->first].value).attr("mutate")();
+                        m_Traits[it->first].value = std::get<pybind11::object>(m_Traits[it->first].value).attr("mutate")();
                         did_mutate = true;
                     }
 #endif
@@ -501,11 +500,11 @@ namespace NEAT
                         // distance between floats - calculate directly
                         dist[it->first] = abs((std::get<floatsetelement>(mine)).value - (std::get<floatsetelement>(yours)).value);
                     }
-#ifdef USE_BOOST_PYTHON
-                    if (std::holds_alternative<py::object>(mine))
+#ifdef PYTHON_BINDINGS
+                    if (std::holds_alternative<pybind11::object>(mine))
                     {
                         // distance between objects - calculate via method
-                        dist[it->first] = py::extract<double>(std::get<py::object>(mine).attr("distance_to")(std::get<py::object>(yours)));
+                        dist[it->first] = std::get<pybind11::object>(mine).attr("distance_to")(std::get<pybind11::object>(yours)).cast<double>();
                     }
 #endif
                 }

@@ -10,12 +10,8 @@
 #include <variant>
 #include <cmath>
 
-#ifdef USE_BOOST_PYTHON
-#include <boost/python.hpp>
-#endif
-
-#ifdef USE_BOOST_PYTHON
-namespace py = boost::python;
+#ifdef PYTHON_BINDINGS
+    #include <pybind11/pybind11.h>
 #endif
 
 namespace NEAT
@@ -44,8 +40,8 @@ namespace NEAT
     };
     
     typedef std::variant<int, double, std::string, intsetelement, floatsetelement
-#ifdef USE_BOOST_PYTHON
-  , py::object
+#ifdef PYTHON_BINDINGS
+  , pybind11::object
 #endif
     > TraitType;
 
@@ -109,8 +105,8 @@ namespace NEAT
                     StringTraitParameters,
                     IntSetTraitParameters,
                     FloatSetTraitParameters
-#ifdef USE_BOOST_PYTHON
-                  , py::object
+#ifdef PYTHON_BINDINGS
+                  , pybind11::object
 #endif
         > m_Details;
 
