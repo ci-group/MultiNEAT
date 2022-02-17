@@ -14,4 +14,5 @@ setup(
     name='multineat',
     version='0.7',  # Update version in conda/meta.yaml as well
     packages=['multineat'],
+    cmake_install_dir="multineat",
 )
