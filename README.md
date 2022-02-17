@@ -21,17 +21,29 @@ GNU Lesser General Public License v3.0
 
 ## Building and installation instructions
 
-Don't forget to update submodules.
+### Prerequisites
+
+Install [Cereal](https://uscilab.github.io/cereal/)
+
+For examples on ubuntu:
+```
+sudo apt install libcereal-dev
+```
+
+If no package is available for your system, install from source.
+The package is header only, so no building required.
+
+### To install as a python library
   ```bash
-  $ git submodule update --init --recursive
+  pip install .
   ```
 
-#### To install as a cpp library
+### To install as a cpp library
   ```bash
-  $ mkdir build && cd build
-  $ cmake ..
-  $ make -j4
-  $ (sudo) make install
+  mkdir build && cd build
+  cmake ..
+  make -j4
+  (sudo) make install
   ```
   
 Installing options:
@@ -46,14 +58,3 @@ Installing options:
   ```
   
  These options may be combined togheter
-
-#### To install as a python library - quick version
-  ```bash
-  $ pip install .
-  ```
-
-#### To install as a python library - slow/old version
-  ```bash
-  python setup.py build_ext
-  python setup.py install
-  ```
