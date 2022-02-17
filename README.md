@@ -25,7 +25,7 @@ GNU Lesser General Public License v3.0
 
 Install [Cereal](https://uscilab.github.io/cereal/)
 
-For examples on ubuntu:
+For example on ubuntu:
 ```
 sudo apt install libcereal-dev
 ```
