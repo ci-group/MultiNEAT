@@ -31,7 +31,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include "boost/date_time/posix_time/posix_time.hpp"
+#include <chrono>
 #include "Random.h"
 #include "Utils.h"
 
@@ -47,8 +47,13 @@ void RNG::Seed(long a_Seed)
 
 void RNG::TimeSeed()
 {
-    auto now = boost::posix_time::second_clock::local_time();
-    Seed(now.time_of_day().total_milliseconds());
+    using namespace std::chrono;
+    milliseconds ms = duration_cast< milliseconds >(
+        system_clock::now().time_since_epoch()
+    );
+
+    Seed(ms.count());
+
 }
 
 // Returns randomly either 1 or -1
