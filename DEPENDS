@@ -1,5 +1,4 @@
 * scikit-build for building the python bindings
-* Boost 1.49 and above with Boost.Python and Boost.Serialization (optional)
 * Python 2.7 (with headers and libs) (optional)
 * ProgressBar (Python package) (optional)
 * NumPy (Python package) (optional)
