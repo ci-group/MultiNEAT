@@ -193,7 +193,7 @@ namespace NEAT
     // returns a completely random individual
     Genome Species::GetRandomIndividual(RNG &a_RNG) const
     {
-        if (BOOST_UNLIKELY(m_Individuals.empty())) // no members yet, return representative
+        if (m_Individuals.empty()) // no members yet, return representative
         {
             std::ostringstream error_message;
             error_message << "Attempted GetRandomIndividual() but no individuals in species ID " << m_ID << std::endl;
@@ -218,7 +218,7 @@ namespace NEAT
         // Perform a search over the members and return the most fit member
 
         // if empty, throw exception
-        if (BOOST_UNLIKELY(m_Individuals.empty()))
+        if (m_Individuals.empty())
         {
             std::ostringstream error_message;
             error_message << "Attempted GetLeader() but no individuals in species ID " << m_ID << std::endl;
@@ -243,7 +243,7 @@ namespace NEAT
 
     Genome Species::GetRepresentative() const
     {
-        if (BOOST_UNLIKELY(m_Individuals.empty()))
+        if (m_Individuals.empty())
         {
             std::ostringstream error_message;
             error_message << "Attempted GetRepresentative() but no individuals in species ID " << m_ID << std::endl;
