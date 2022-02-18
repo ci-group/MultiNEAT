@@ -754,65 +754,49 @@ namespace NEAT
     }
 
     // aart:
-    // lazily copy pasted from https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
-    // used for HasLoops
-    // before this was done with Boost::Graph but that dependency was dropped
-    // pretty sure this implementation is highly inefficient, but it appears to be good enough
+    // based on https://www.geeksforgeeks.org/detect-cycle-in-a-graph/
     class Graph
     {
-        int V;    // No. of vertices
-        std::list<int> *adj;    // Pointer to an array containing adjacency lists
+        std::vector<std::vector<int>> adjacency_lists;
 
-        bool isCyclicUtil(int v, bool visited[], bool *recStack) // used by isCyclic()
+        bool IsCyclicRec(int v, std::vector<bool>& visited, std::vector<bool>& recursion_stack)
         {
-            if(visited[v] == false)
+            if (!visited[v])
             {
-                // Mark the current node as visited and part of recursion stack
                 visited[v] = true;
-                recStack[v] = true;
+                recursion_stack[v] = true;
         
-                // Recur for all the vertices adjacent to this vertex
-                std::list<int>::iterator i;
-                for(i = adj[v].begin(); i != adj[v].end(); ++i)
+                // recur for all the vertices adjacent to this vertex
+                for (auto& child : adjacency_lists[v])
                 {
-                    if ( !visited[*i] && isCyclicUtil(*i, visited, recStack) )
-                        return true;
-                    else if (recStack[*i])
+                    if (recursion_stack[child] || IsCyclicRec(child, visited, recursion_stack))
                         return true;
                 }
-        
+
+                recursion_stack[v] = false;
             }
-            recStack[v] = false;  // remove the vertex from recursion stack
-            return false;
+            return false
         }
     public:
-        Graph(int V)
+        Graph(size_t num_nodes) :
+            adjacency_lists(num_nodes)
+        {}
+
+        void AddEdge(int from_node, int to_node)
         {
-            this->V = V;
-            adj = new std::list<int>[V];
+            adjacency_lists[from_node].push_back(to_node);
         }
 
-        void addEdge(int v, int w)
+        // returns true if there is a cycle in this graph
+        bool IsCyclic()
         {
-            adj[v].push_back(w); // Add w to v’s list.
-        }
-
-        bool isCyclic()    // returns true if there is a cycle in this graph
-        {
-            // Mark all the vertices as not visited and not part of recursion
-            // stack
-            bool *visited = new bool[V];
-            bool *recStack = new bool[V];
-            for(int i = 0; i < V; i++)
-            {
-                visited[i] = false;
-                recStack[i] = false;
-            }
+            // mark all the vertices as not visited and not part of recursion stack
+            std::vector<bool> visited(adjacency_lists.size(), false);
+            std::vector<bool> recursion_stack(adjacency_lists.size(), false);
         
-            // Call the recursive helper function to detect cycle in different
-            // DFS trees
-            for(int i = 0; i < V; i++)
-                if (isCyclicUtil(i, visited, recStack))
+            // call the recursive helper function to detect cycles in different DFS trees
+            for(size_t i = 0; i < adjacency_lists.size(); ++i)
+                if (IsCyclicRec(i, visited, recursion_stack))
                     return true;
         
             return false;
@@ -829,10 +813,10 @@ namespace NEAT
         Graph graph(net.m_connections.size());
         for (long unsigned int i = 0; i < net.m_connections.size(); i++)
         {
-            graph.addEdge(net.m_connections[i].m_source_neuron_idx, net.m_connections[i].m_target_neuron_idx);
+            graph.AddEdge(net.m_connections[i].m_source_neuron_idx, net.m_connections[i].m_target_neuron_idx);
         }
 
-        return graph.isCyclic();
+        return graph.IsCyclic();
     }
 
     // Returns true if the specified link is present in the genome
