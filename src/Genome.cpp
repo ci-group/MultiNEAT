@@ -772,10 +772,10 @@ namespace NEAT
                     if (recursion_stack[child] || IsCyclicRec(child, visited, recursion_stack))
                         return true;
                 }
-
+  
                 recursion_stack[v] = false;
             }
-            return false
+            return false;
         }
     public:
         Graph(size_t num_nodes) :
