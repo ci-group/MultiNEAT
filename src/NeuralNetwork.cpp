@@ -159,7 +159,7 @@ double tanh_derivative(double x)
 ///////////////////////////////////////
 // Neural network class implementation
 ///////////////////////////////////////
-NeuralNetwork::NeuralNetwork(bool a_Minimal)
+NeuralNetwork::NeuralNetwork(bool a_Minimal, RNG& random)
 {
     if (!a_Minimal)
     {
@@ -224,8 +224,7 @@ NeuralNetwork::NeuralNetwork(bool a_Minimal)
         // Initialize the network's weights (make them random)
         for (unsigned int i = 0; i < m_connections.size(); i++)
         {
-            m_connections[i].m_weight = ((double) rand() / (double) RAND_MAX)
-                    - 0.5;
+            m_connections[i].m_weight = random.RandFloatSigned() / 2.0;
         }
 
         // clean up other neuron data as well

@@ -920,7 +920,7 @@ namespace NEAT
 
     // The procedure uses the [0] CPPN output for creating nodes, and if the substrate is leaky, [1] and [2] for time constants and biases
     // Also assumes the CPPN uses signed activation outputs
-    void Genome::BuildHyperNEATPhenotype(NeuralNetwork &net, Substrate &subst)
+    void Genome::BuildHyperNEATPhenotype(NeuralNetwork &net, Substrate &subst, RNG& rng)
     {
         // We need a substrate with at least one input and output
         ASSERT(subst.m_input_coords.size() > 0);
@@ -988,7 +988,7 @@ namespace NEAT
 
         // Begin querying the CPPN
         // Create the neural network that will represent the CPPN
-        NeuralNetwork t_temp_phenotype(true);
+        NeuralNetwork t_temp_phenotype(true, rng);
         BuildPhenotype(t_temp_phenotype);
         t_temp_phenotype.Flush();
 
@@ -3608,7 +3608,7 @@ namespace NEAT
         std::cout << "====================================================================\n";
     }
     
-    void Genome::BuildESHyperNEATPhenotype(NeuralNetwork &net, Substrate &subst, Parameters &params)
+    void Genome::BuildESHyperNEATPhenotype(NeuralNetwork &net, Substrate &subst, Parameters &params, RNG& rng)
     {
         ASSERT(subst.m_input_coords.size() > 0);
         ASSERT(subst.m_output_coords.size() > 0);
@@ -3644,7 +3644,7 @@ namespace NEAT
                                      static_cast<unsigned short>(output_count));
 
 
-        NeuralNetwork t_temp_phenotype(true);
+        NeuralNetwork t_temp_phenotype(true, rng);
         BuildPhenotype(t_temp_phenotype);
 
         // Find Inputs to Hidden connections.

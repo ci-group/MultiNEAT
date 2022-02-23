@@ -307,7 +307,7 @@ namespace NEAT
         // Other possible methods for building a phenotype go here
         // Like CPPN/HyperNEAT stuff
         ////////////
-        void BuildHyperNEATPhenotype(NeuralNetwork &net, Substrate &subst);
+        void BuildHyperNEATPhenotype(NeuralNetwork &net, Substrate &subst, RNG& rng);
 
 #ifdef PYTHON_BINDINGS
 
@@ -617,7 +617,7 @@ namespace NEAT
             }
         };
 
-        void BuildESHyperNEATPhenotype(NeuralNetwork &a_net, Substrate &subst, Parameters &params);
+        void BuildESHyperNEATPhenotype(NeuralNetwork &a_net, Substrate &subst, Parameters &params, RNG& rng);
 
         void DivideInitialize(const std::vector<double> &node,
                               std::shared_ptr<QuadPoint> &root,

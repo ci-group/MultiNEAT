@@ -16,7 +16,7 @@ void (NeuralNetwork::*NN_Input_numpy)(const pybind11::array_t<double, pybind11::
 void export_NeuralNetwork(pybind11::module_& mod) {
     pybind11::class_<NeuralNetwork>(mod, "NeuralNetwork")
         .def(pybind11::init<>())
-        .def(pybind11::init<bool>())
+        .def(pybind11::init<bool, RNG&>())
 
         .def("InitRTRLMatrix",
             &NeuralNetwork::InitRTRLMatrix)

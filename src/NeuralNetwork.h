@@ -32,6 +32,7 @@
 
 #include <vector>
 #include "Genes.h"
+#include "Random.h"
 
 #ifdef PYTHON_BINDINGS
     #include <pybind11/pybind11.h>
@@ -124,7 +125,7 @@ public:
     std::vector<Connection> m_connections; // array size - number of connections
     std::vector<Neuron>     m_neurons;
 
-    NeuralNetwork(bool a_Minimal); // if given false, the constructor will create a standard XOR network topology.
+    NeuralNetwork(bool a_Minimal, RNG& random); // if given false, the constructor will create a standard XOR network topology.
     NeuralNetwork();
 
     void InitRTRLMatrix(); // initializes the sensitivity cube for RTRL learning.

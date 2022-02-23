@@ -321,6 +321,8 @@ public:
     unsigned int m_GensSinceLastArchiving;
     unsigned int m_QuickAddCounter;
 
+#ifdef PYTHON_BINDINGS
+
     // Serialization
     template<class Archive>
     void serialize(Archive & ar)
@@ -340,7 +342,7 @@ public:
         ar & m_GensSinceMPCLastChanged;
         ar & m_Genomes;
         ar & m_GenomeArchive;
-        //ar & m_RNG;
+        ar & m_RNG;
         ar & m_Parameters;
         ar & m_Generation;
         ar & m_Species;
@@ -371,6 +373,8 @@ public:
         ia >> pop;
         return pop;
     }
+
+#endif
 };
 
 } // namespace NEAT
