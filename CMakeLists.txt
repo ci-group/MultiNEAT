@@ -24,7 +24,7 @@ endif()
 
 include(GNUInstallDirs)
 
-find_package(cereal REQUIRED)
+find_package(cereal)
 
 set(SOURCE_FILES
     src/Genome.cpp
