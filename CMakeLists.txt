@@ -2,7 +2,7 @@
 # Based on the article: https://pabloariasal.github.io/2018/02/19/its-time-to-do-cmake-right/
 
 cmake_minimum_required(VERSION 3.3)
-project(MultiNEAT VERSION 0.6 LANGUAGES C CXX)
+project(MultiNEAT VERSION 0.7 LANGUAGES C CXX)
 
 set (CMAKE_CXX_STANDARD 11)
 
