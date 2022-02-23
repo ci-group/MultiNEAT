@@ -3,7 +3,10 @@
 # https://pabloariasal.github.io/2018/02/19/its-time-to-do-cmake-right/
 
 cmake_minimum_required(VERSION 3.15)
-project(MultiNEAT VERSION 0.7 LANGUAGES CXX)
+project(
+    MultiNEAT
+    VERSION 0.8
+    LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
