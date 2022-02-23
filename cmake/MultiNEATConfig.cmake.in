@@ -3,7 +3,7 @@ include(CMakeFindDependencyMacro)
 
 list(APPEND CMAKE_MODULE_PATH ${MultiNEAT_CMAKE_DIR})
 
-find_dependency(cereal)
+find_dependency(cereal REQUIRED)
 
 list(REMOVE_AT CMAKE_MODULE_PATH -1)
 

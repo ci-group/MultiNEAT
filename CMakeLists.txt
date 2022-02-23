@@ -24,7 +24,7 @@ endif()
 
 include(GNUInstallDirs)
 
-find_package(cereal) # it is REQUIRED but not marked as such because ubuntu package does not ship with findCereal.cmake for some reason.
+find_package(cereal REQUIRED)
 
 set(SOURCE_FILES
     src/Genome.cpp
