@@ -22,4 +22,4 @@ jobs:
     - name: test
       run: cd build && ctest
     - name: install
-      run: cmake --build build --target install
+      run: sudo cmake --build build --target install
