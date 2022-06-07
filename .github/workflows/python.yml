@@ -1,0 +1,27 @@
+name: Python Bindings
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: dependencies
+      run: sudo apt install -y libcereal-dev libboost-all-dev pybind11
+    - name: cmake
+      run: cmake -B build -DENABLE_TESTING=ON -DSKBUILD=ON
+    - name: build
+      run: cmake --build build
+    - name: test
+      run: cd build && ctest
+    - name: install
+      run: sudo cmake --build build --target install
+    - name: pip install
+      run: pip install .
