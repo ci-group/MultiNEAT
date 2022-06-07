@@ -14,7 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: dependencies
-      run: sudo apt install -y libcereal-dev libboost-all-dev pybind11-dev
+      run: sudo apt install -y libcereal-dev libboost-all-dev
+      run: sudo pip install pybind11
     - name: cmake
       run: cmake -B build -DENABLE_TESTING=ON -DSKBUILD=ON
     - name: build
