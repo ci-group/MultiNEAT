@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - dependencies:
+      run: apt install libcereal-dev
     - name: cmake
       run: cmake -B build -DENABLE_TESTING=ON
     - name: build
