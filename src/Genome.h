@@ -122,6 +122,9 @@ namespace NEAT
         // Returns true is the specified neuron ID is a dead end or isolated
         bool IsDeadEndNeuron(int a_id) const;
 
+        friend bool operator==(Genome const &lhs, Genome const &rhs);
+        friend std::ostream &operator<<(std::ostream &stream, Genome const &genome);
+
     public:
 
         // The two lists of genes
@@ -158,13 +161,6 @@ namespace NEAT
 
         // assignment operator
         Genome &operator=(const Genome &a_g);
-
-        // comparison operator (nessesary for python bindings)
-        // todo: implement a better comparison technique
-        bool operator==(Genome const &other) const
-        {
-            return m_ID == other.m_ID;
-        }
 
         // Builds this genome from a file
         Genome(const char *a_filename);
@@ -643,20 +639,28 @@ namespace NEAT
                        unsigned int output_count, unsigned int hidden_count);
 
         // Serialization
-        template<class Archive>
-        void serialize(Archive & ar)
+        template <class Archive>
+        void serialize(Archive &ar)
         {
-            ar & m_ID;
-            ar & m_NeuronGenes;
-            ar & m_LinkGenes;
-            ar & m_NumInputs;
-            ar & m_NumOutputs;
-            ar & m_Fitness;
-            ar & m_AdjustedFitness;
-            ar & m_Depth;
-            ar & m_OffspringAmount;
-            ar & m_Evaluated;
-            //ar & m_PhenotypeBehavior; // todo: think about how we will handle the behaviors with pickle
+            ar &m_ID;
+            ar &m_NeuronGenes;
+            ar &m_LinkGenes;
+            ar &m_NumInputs;
+            ar &m_NumOutputs;
+            ar &m_Fitness;
+            ar &m_AdjustedFitness;
+            ar &m_Depth;
+            ar &m_OffspringAmount;
+            ar &m_Evaluated;
+            ar &m_NeuronRecursionLimit;
+            ar &m_GenomeGene;
+            ar &m_initial_num_neurons;
+            ar &m_initial_num_links;
+
+            if (m_PhenotypeBehavior != nullptr)
+            {
+                throw std::runtime_error("m_PhenotypeBehavior not null but serialization not implemented.");
+            }
         }
 
         std::string Serialize() const

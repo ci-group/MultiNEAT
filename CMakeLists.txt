@@ -31,6 +31,7 @@ find_package(cereal)
 
 set(SOURCE_FILES
     src/Genome.cpp
+    src/Genes.cpp
     src/Innovation.cpp
     src/NeuralNetwork.cpp
     src/Parameters.cpp

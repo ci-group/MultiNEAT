@@ -6,7 +6,17 @@ target_link_libraries(serialize_genome
         MultiNEAT
         Boost::unit_test_framework)
 
-add_test(serialize_genome serialize_genome)
+add_test(genome serialize_genome)
+
+# serialize_innovation_database
+add_executable(serialize_innovation_database
+serialize_innovation_database.cpp)
+
+target_link_libraries(serialize_innovation_database
+        MultiNEAT
+        Boost::unit_test_framework)
+
+add_test(serialize_innovation_database serialize_innovation_database)
 
 if(GENERATE_PYTHON_BINDINGS)
     # python to C++ test

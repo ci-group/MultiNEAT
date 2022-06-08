@@ -295,6 +295,34 @@ void InnovationDatabase::Flush()
     m_Innovations.clear();
 }
 
+bool operator==(Innovation const &lhs, Innovation const &rhs)
+{
+    return lhs.m_ID == rhs.m_ID &&
+           lhs.m_InnovType == rhs.m_InnovType &&
+           lhs.m_FromNeuronID == rhs.m_FromNeuronID &&
+           lhs.m_ToNeuronID == rhs.m_ToNeuronID &&
+           lhs.m_NeuronType == rhs.m_NeuronType &&
+           lhs.m_NeuronID == rhs.m_NeuronID;
+}
+
+std::ostream &operator<<(std::ostream &stream, Innovation const &innov)
+{
+    stream << innov.Serialize();
+    return stream;
+}
+
+bool operator==(InnovationDatabase const &lhs, InnovationDatabase const &rhs)
+{
+    return lhs.m_NextNeuronID == rhs.m_NextNeuronID &&
+           lhs.m_NextInnovationNum == rhs.m_NextInnovationNum &&
+           lhs.m_Innovations == rhs.m_Innovations;
+}
+
+std::ostream &operator<<(std::ostream &stream, InnovationDatabase const &db)
+{
+    stream << db.Serialize();
+    return stream;
+}
 
 
 

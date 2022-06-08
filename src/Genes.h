@@ -39,6 +39,9 @@
 #include "Utils.h"
 
 #include <cereal/cereal.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/map.hpp>
+#include <cereal/archives/json.hpp>
 
 
 namespace NEAT
@@ -86,6 +89,9 @@ namespace NEAT
     //////////////////////////////////
     class Gene
     {
+        friend bool operator==(Gene const &lhs, Gene const &rhs);
+        friend std::ostream &operator<<(std::ostream &stream, Gene const &gene);
+
     public:
         // Arbitrary traits
         std::map<std::string, Trait> m_Traits;
@@ -512,8 +518,34 @@ namespace NEAT
 
             return dist;
         }
+
+        // Serialization
+        template<class Archive>
+        void serialize(Archive & ar)
+        {
+            ar & m_Traits;
+        }
+
+        std::string Serialize() const
+        {
+            std::ostringstream os;
+            {
+                cereal::JSONOutputArchive oa(os);
+                oa << *this;
+            }
+            return os.str();
+        }
+
+        void Deserialize(const std::string &text)
+        {
+            std::istringstream is (text);
+            cereal::JSONInputArchive ia(is);
+            ia >> *this;
+        }
     };
 
+    bool operator==(Gene const &lhs, Gene const &rhs);
+    std::ostream &operator<<(std::ostream &stream, Gene const &gene);
 
     //////////////////////////////////
     // This class defines a link gene
@@ -523,6 +555,9 @@ namespace NEAT
         /////////////////////
         // Members
         /////////////////////
+
+        friend bool operator==(LinkGene const &lhs, LinkGene const &rhs);
+        friend std::ostream &operator<<(std::ostream &stream, LinkGene const &gene);
 
     public:
 
@@ -543,20 +578,6 @@ namespace NEAT
         bool m_IsRecurrent;
 
     public:
-
-        // Serialization
-        template<class Archive>
-        void serialize(Archive & ar)
-        {
-            ar & m_FromNeuronID;
-            ar & m_ToNeuronID;
-            ar & m_InnovationID;
-            ar & m_IsRecurrent;
-            ar & m_Weight;
-
-            // the traits too, TODO
-            //ar & m_Traits;
-        }
 
         double GetWeight() const
         {
@@ -651,11 +672,43 @@ namespace NEAT
             return (a_lhs.m_InnovationID != a_rhs.m_InnovationID);
         }
 
-        friend bool operator==(const LinkGene &a_lhs, const LinkGene &a_rhs)
+        // friend bool operator==(const LinkGene &a_lhs, const LinkGene &a_rhs)
+        // {
+        //     return (a_lhs.m_InnovationID == a_rhs.m_InnovationID);
+        // }
+
+        // Serialization
+        template<class Archive>
+        void serialize(Archive & ar)
         {
-            return (a_lhs.m_InnovationID == a_rhs.m_InnovationID);
+            ar & cereal::base_class<Gene>(this);
+            ar & m_FromNeuronID;
+            ar & m_ToNeuronID;
+            ar & m_InnovationID;
+            ar & m_IsRecurrent;
+            ar & m_Weight;
+        }
+
+        std::string Serialize() const
+        {
+            std::ostringstream os;
+            {
+                cereal::JSONOutputArchive oa(os);
+                oa << *this;
+            }
+            return os.str();
+        }
+
+        void Deserialize(const std::string &text)
+        {
+            std::istringstream is (text);
+            cereal::JSONInputArchive ia(is);
+            ia >> *this;
         }
     };
+
+    bool operator==(LinkGene const &lhs, LinkGene const &rhs);
+    std::ostream &operator<<(std::ostream &stream, LinkGene const &gene);
 
 
 ////////////////////////////////////
@@ -666,6 +719,9 @@ namespace NEAT
         /////////////////////
         // Members
         /////////////////////
+
+        friend bool operator==(NeuronGene const &lhs, NeuronGene const &rhs);
+        friend std::ostream &operator<<(std::ostream &stream, NeuronGene const &gene);
 
     public:
         // These variables are initialized once and cannot be changed
@@ -723,49 +779,12 @@ namespace NEAT
         // The type of activation function the neuron has
         ActivationFunction m_ActFunction;
 
-        // Serialization
-        template<class Archive>
-        void serialize(Archive & ar)
-        {
-            ar & m_ID;
-            ar & m_Type;
-            ar & m_A;
-            ar & m_B;
-            ar & m_TimeConstant;
-            ar & m_Bias;
-            ar & x;
-            ar & y;
-            ar & m_ActFunction;
-            ar & m_SplitY;
-
-            // TODO the traits also
-            //ar & m_Traits;
-        }
-
         ////////////////
         // Constructors
         ////////////////
         NeuronGene()
         {
 
-        }
-        
-        /*friend bool operator!=(const NeuronGene &a_lhs, const NeuronGene &a_rhs)
-        {
-            return (a_lhs.m_ID != a_rhs.m_ID);
-        }*/
-        
-        friend bool operator==(const NeuronGene &a_lhs, const NeuronGene &a_rhs)
-        {
-            return (a_lhs.m_ID == a_rhs.m_ID) &&
-                    (a_lhs.m_Type == a_rhs.m_Type)
-                    //(a_lhs.m_SplitY == a_rhs.m_SplitY) &&
-                    //(a_lhs.m_A == a_rhs.m_A) &&
-                    //(a_lhs.m_B == a_rhs.m_B) &&
-                    //(a_lhs.m_TimeConstant == a_rhs.m_TimeConstant) &&
-                    //(a_lhs.m_Bias == a_rhs.m_Bias) &&
-                    //(a_lhs.m_ActFunction == a_rhs.m_ActFunction)
-                    ;
         }
 
         NeuronGene(NeuronType a_type, int a_id, double a_splity)
@@ -842,7 +861,44 @@ namespace NEAT
             m_Bias = a_Bias;
             m_ActFunction = a_ActFunc;
         }
+
+        // Serialization
+        template<class Archive>
+        void serialize(Archive & ar)
+        {
+            ar & cereal::base_class<Gene>(this);
+            ar & m_ID;
+            ar & m_Type;
+            ar & m_A;
+            ar & m_B;
+            ar & m_TimeConstant;
+            ar & m_Bias;
+            ar & x;
+            ar & y;
+            ar & m_ActFunction;
+            ar & m_SplitY;
+        }
+
+        std::string Serialize() const
+        {
+            std::ostringstream os;
+            {
+                cereal::JSONOutputArchive oa(os);
+                oa << *this;
+            }
+            return os.str();
+        }
+
+        void Deserialize(const std::string &text)
+        {
+            std::istringstream is (text);
+            cereal::JSONInputArchive ia(is);
+            ia >> *this;
+        }
     };
+
+    bool operator==(NeuronGene const &lhs, NeuronGene const &rhs);
+    std::ostream &operator<<(std::ostream &stream, NeuronGene const &gene);
 
 
 } // namespace NEAT

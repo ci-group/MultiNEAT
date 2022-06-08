@@ -76,6 +76,9 @@ private:
     NeuronType m_NeuronType;
     int m_NeuronID;
 
+    friend bool operator==(Innovation const &lhs, Innovation const &rhs);
+    friend std::ostream &operator<<(std::ostream &stream, Innovation const &db);
+
 public:
 
     ////////////////////////////
@@ -142,7 +145,27 @@ public:
         ar & m_NeuronType;
         ar & m_NeuronID;
     }
+
+    std::string Serialize() const
+    {
+        std::ostringstream os;
+        {
+            cereal::JSONOutputArchive oa(os);
+            oa << *this;
+        }
+        return os.str();
+    }
+
+    void Deserialize(const std::string &text)
+    {
+        std::istringstream is(text);
+        cereal::JSONInputArchive ia(is);
+        ia >> *this;
+    }
 };
+
+bool operator==(Innovation const &lhs, Innovation const &rhs);
+std::ostream &operator<<(std::ostream &stream, Innovation const &db);
 
 
 // forward
@@ -164,6 +187,9 @@ private:
 
     int m_NextNeuronID;
     int m_NextInnovationNum;
+
+    friend bool operator==(InnovationDatabase const &lhs, InnovationDatabase const &rhs);
+    friend std::ostream &operator<<(std::ostream &stream, InnovationDatabase const &db);
 
 public:
 
@@ -258,7 +284,8 @@ public:
     }
 };
 
-
+bool operator==(InnovationDatabase const &lhs, InnovationDatabase const &rhs);
+std::ostream &operator<<(std::ostream &stream, InnovationDatabase const &db);
 
 
 

@@ -4172,6 +4172,31 @@ namespace NEAT
         }
     }
 
+    bool operator==(Genome const &lhs, Genome const &rhs)
+    {
+        return lhs.m_ID == rhs.m_ID &&
+               lhs.m_NumInputs == rhs.m_NumInputs &&
+               lhs.m_NumOutputs == rhs.m_NumOutputs &&
+               lhs.m_Fitness == rhs.m_Fitness &&
+               lhs.m_AdjustedFitness == rhs.m_AdjustedFitness &&
+               lhs.m_Depth == rhs.m_Depth &&
+               lhs.m_NeuronRecursionLimit == rhs.m_NeuronRecursionLimit &&
+               lhs.m_OffspringAmount == rhs.m_OffspringAmount &&
+               lhs.m_NeuronGenes == rhs.m_NeuronGenes &&
+               lhs.m_LinkGenes == rhs.m_LinkGenes &&
+               lhs.m_GenomeGene == rhs.m_GenomeGene &&
+               lhs.m_Evaluated == rhs.m_Evaluated &&
+               lhs.m_initial_num_neurons == rhs.m_initial_num_neurons &&
+               lhs.m_initial_num_links == rhs.m_initial_num_links &&
+               ((lhs.m_PhenotypeBehavior == nullptr && rhs.m_PhenotypeBehavior == nullptr) || (*lhs.m_PhenotypeBehavior == *rhs.m_PhenotypeBehavior));
+    }
+
+    std::ostream &operator<<(std::ostream &stream, Genome const &genome)
+    {
+        stream << genome.Serialize();
+        return stream;
+    }
+
 #ifdef PYTHON_BINDINGS
     pybind11::dict Genome::TraitMap2Dict(const std::map< std::string, Trait>& tmap) const
     {
