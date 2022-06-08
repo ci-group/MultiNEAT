@@ -122,7 +122,7 @@ class RawGenomeTest(unittest.TestCase):
         a.Mutate(False, NEAT.SearchMode.COMPLEXIFYING, self._innov_db, self._params, self._rng)
         b = NEAT.Genome(a)
         b.SetID(2)
-        for i in range(10):
+        for i in range(100):
             b.Mutate(False, NEAT.SearchMode.COMPLEXIFYING, self._innov_db, self._params, self._rng)
         # b.PrintAllTraits()
 
@@ -134,7 +134,7 @@ class RawGenomeTest(unittest.TestCase):
         output_c = self.activate_network(c)
         self.assertIsNotNone(output_c)
         self.assertNotAlmostEqual(output_a, output_c)
-        self.assertNotAlmostEqual(output_b, output_c)
+        self.assertNotAlmostEqual(output_b, output_c, places=15)
 
         for i in range(10):
             c.Mutate(False, NEAT.SearchMode.COMPLEXIFYING, self._innov_db, self._params, self._rng)
