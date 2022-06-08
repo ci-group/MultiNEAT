@@ -23,3 +23,9 @@ jobs:
       run: cd tests/python && ./test_raw_genome.py
     - name: test xor
       run: cd tests/python && ./test_xor.py
+    - name: configure tests
+      run: cmake -B build -DGENERATE_PYTHON_BINDINGS=ON -DENABLE_TESTING=ON
+    - name: build tests
+      run: cmake --build build
+    - name: run cmake tests
+      run: cmake --build build --target test
