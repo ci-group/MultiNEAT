@@ -16,7 +16,7 @@ class RawGenomeTest(unittest.TestCase):
         params.WeightDiffCoeff = 0.1
         params.CompatTreshold = 2.0
         params.YoungAgeTreshold = 15
-        params.SpeciesMaxStagnation = 15
+        params.SpeciesDropoffAge = 15
         params.OldAgeTreshold = 35
         params.MinSpecies = 2
         params.MaxSpecies = 10
@@ -68,7 +68,7 @@ class RawGenomeTest(unittest.TestCase):
         genome.BuildPhenotype(self._net)
         _input = np.array([1, 2, 3], dtype=float) if _input is None else _input
         self._net.Input(_input)
-        self._net.Activate()
+        self._net.ActivateAllLayers()
         output = self._net.Output()
         return output[0]
 

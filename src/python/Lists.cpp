@@ -29,7 +29,7 @@ PYBIND11_MAKE_OPAQUE(std::vector<NEAT::PhenotypeBehavior>);
 
 void export_Lists(pybind11::module_& mod) {
     pybind11::bind_vector<std::vector<double>>(mod, "DoublesList");
-    pybind11::bind_vector<std::vector<std::vector<double>>>(mod, "DoublesList2");
+    pybind11::bind_vector<std::vector<std::vector<double>>>(mod, "DoublesList2D");
     pybind11::bind_vector<std::vector<float>>(mod, "FloatsList");
     pybind11::bind_vector<std::vector<std::vector<float>>>(mod, "FloatsList2D");
     pybind11::bind_vector<std::vector<int>>(mod, "IntsList");

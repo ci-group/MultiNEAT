@@ -22,29 +22,25 @@ class XorTest(unittest.TestCase):
             net.Flush()
             net.Input(np.array([1., 0., 1.]))  # can input numpy arrays, too
             # for some reason only np.float64 is supported
-            for _ in range(2):
-                net.Activate()
+            net.ActivateAllLayers()
             o = net.Output()
             error += abs(1 - o[0])
 
             net.Flush()
             net.Input([0, 1, 1])
-            for _ in range(2):
-                net.Activate()
+            net.ActivateAllLayers()
             o = net.Output()
             error += abs(1 - o[0])
 
             net.Flush()
             net.Input([1, 1, 1])
-            for _ in range(2):
-                net.Activate()
+            net.ActivateAllLayers()
             o = net.Output()
             error += abs(o[0])
 
             net.Flush()
             net.Input([0, 0, 1])
-            for _ in range(2):
-                net.Activate()
+            net.ActivateAllLayers()
             o = net.Output()
             error += abs(o[0])
 
@@ -57,7 +53,7 @@ class XorTest(unittest.TestCase):
         params.WeightDiffCoeff = 0.1
         params.CompatTreshold = 2.0
         params.YoungAgeTreshold = 15
-        params.SpeciesMaxStagnation = 15
+        params.SpeciesDropoffAge = 15
         params.OldAgeTreshold = 35
         params.MinSpecies = 2
         params.MaxSpecies = 10
@@ -96,7 +92,7 @@ class XorTest(unittest.TestCase):
         params.MutateNeuronTraitsProb = 0
         params.MutateLinkTraitsProb = 0
 
-        params.AllowLoops = True
+        params.AllowLoops = False
         params.AllowClones = True
 
         def getbest(i, seed=0):
