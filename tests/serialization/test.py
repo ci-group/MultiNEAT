@@ -26,7 +26,7 @@ class TestSerialization(unittest.TestCase):
         params.WeightDiffCoeff = 0.1
         params.CompatTreshold = 2.0
         params.YoungAgeTreshold = 15
-        params.SpeciesMaxStagnation = 15
+        params.SpeciesDropoffAge = 15
         params.OldAgeTreshold = 35
         params.MinSpecies = 2
         params.MaxSpecies = 10
@@ -190,14 +190,14 @@ class TestSerialization(unittest.TestCase):
         for n_gene in self.g.NeuronGenes:
             # print(f'neuron gene {i}')
             self.assertEqual(n_gene.ID, int(data[i + 0]))
-            self.assertEqual(n_gene.Type, multineat.NeuronType(data[i + 1]))
+            self.assertEqual(n_gene.Type, multineat.NeuronType(int(data[i + 1])))
             self.assertEqual(n_gene.A, float(data[i + 2]))
             self.assertEqual(n_gene.B, float(data[i + 3]))
             self.assertEqual(n_gene.TimeConstant, float(data[i + 4]))
             self.assertEqual(n_gene.Bias, float(data[i + 5]))
             self.assertEqual(n_gene.x, int(data[i + 6]))
             self.assertEqual(n_gene.y, int(data[i + 7]))
-            self.assertEqual(n_gene.ActFunction, multineat.ActivationFunction(data[i + 8]))
+            self.assertEqual(n_gene.ActFunction, multineat.ActivationFunction(int(data[i + 8])))
             self.assertEqual(n_gene.SplitY, float(data[i + 9]))
             i += 10
 

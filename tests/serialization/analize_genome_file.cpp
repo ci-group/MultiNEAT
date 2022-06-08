@@ -11,7 +11,7 @@ NEAT::Genome deserialize(const std::string &filename)
     NEAT::Genome g;
     std::ifstream input_file(filename);
     {
-        cereal::JSONInputArchive archive(input_data);
+        cereal::JSONInputArchive archive(input_file);
         archive >> g;
     }
     return g;
