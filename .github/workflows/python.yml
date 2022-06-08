@@ -17,3 +17,9 @@ jobs:
       run: sudo apt install -y libcereal-dev libboost-all-dev python3-pybind11 pybind11-dev
     - name: pip install
       run: pip install .
+    - name: test import
+      run: cd tests/python && ./test_import.py
+    - name: test raw genome
+      run: cd tests/python && ./test_raw_genome.py
+    - name: test xor
+      run: cd tests/python && ./test_xor.py
