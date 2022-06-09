@@ -672,11 +672,6 @@ namespace NEAT
             return (a_lhs.m_InnovationID != a_rhs.m_InnovationID);
         }
 
-        // friend bool operator==(const LinkGene &a_lhs, const LinkGene &a_rhs)
-        // {
-        //     return (a_lhs.m_InnovationID == a_rhs.m_InnovationID);
-        // }
-
         // Serialization
         template<class Archive>
         void serialize(Archive & ar)
