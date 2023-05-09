@@ -52,6 +52,8 @@ if(NOT SKBUILD)
         PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/multineat>)
 
+    target_link_libraries(MultiNEAT PUBLIC cereal::cereal)
+
     # INSTALL SECTION
     set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/MultiNEAT)
 
@@ -140,6 +142,7 @@ else()
     pybind11_add_module(_multineat MODULE ${SOURCE_FILES} ${PYTHON_SOURCE_FILES})
 
     target_compile_definitions(_multineat PUBLIC PYTHON_BINDINGS)
+    target_link_libraries(_multineat PUBLIC cereal::cereal)
 
     install(TARGETS _multineat DESTINATION .)
 
