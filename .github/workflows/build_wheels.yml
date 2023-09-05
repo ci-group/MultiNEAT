@@ -22,6 +22,8 @@ jobs:
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_BUILD: "cp3[8-9]-* cp3[10-99]-*"  # build for 3.8 and higher
 
       - uses: actions/upload-artifact@v3
         with:
