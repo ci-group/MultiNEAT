@@ -8,7 +8,7 @@ project(
     VERSION 0.9
     LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
 option(ENABLE_TESTING "If tests should be built.")
 
