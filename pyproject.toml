@@ -4,6 +4,6 @@ requires = [
     "wheel>=0.37",
     "cmake>=3.22",
     "scikit-build>=0.13",
-    "numpy>=1.22",
+    "numpy>=1.19.5",
     "pybind11>=2.9",
 ]
