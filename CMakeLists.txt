@@ -30,6 +30,8 @@ include(GNUInstallDirs)
 # Not doing this anymore because not all package managers have it.
 # find_package(cereal)
 
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14")
+
 set(SOURCE_FILES
     src/Genome.cpp
     src/Genes.cpp
