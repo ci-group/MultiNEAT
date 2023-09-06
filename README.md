@@ -1,5 +1,7 @@
 # About MultiNEAT
 
+**This is a fork of the original multineat library.**
+
 MultiNEAT is a portable software library for performing neuroevolution, a form of machine learning that
 trains neural networks with a genetic algorithm. It is based on NEAT, an advanced method for evolving
 neural networks through complexification. The neural networks in NEAT begin evolution with very simple
@@ -20,18 +22,6 @@ GNU Lesser General Public License v3.0
 [http://multineat.com/docs.html](http://multineat.com/docs.html)
 
 ## Building and installation instructions
-
-### Prerequisites
-
-Install [Cereal](https://uscilab.github.io/cereal/)
-
-For example on ubuntu:
-```
-sudo apt install libcereal-dev
-```
-
-If no package is available for your system, install from source.
-The package is header only, so no building required.
 
 ### To install as a python library
   ```bash

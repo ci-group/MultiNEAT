@@ -13,8 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
     - name: dependencies
-      run: sudo apt install -y libcereal-dev libboost-all-dev python3-pybind11 pybind11-dev
+      run: sudo apt install -y libboost-all-dev python3-pybind11 pybind11-dev
     - name: pip install
       run: pip install .
     - name: test import
