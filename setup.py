@@ -12,7 +12,10 @@ except ImportError:
 
 setup(
     name="multineat",
-    version="0.10", # Update version in conda/meta.yaml as well
-    packages=['multineat'],
+    version="0.10",  # Update version in conda/meta.yaml as well
+    packages=["multineat"],
     cmake_install_dir="multineat",
+    url="https://github.com/ci-group/MultiNEAT",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
 )
