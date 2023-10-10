@@ -12,22 +12,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
-    - name: dependencies
-      run: sudo apt install -y libboost-all-dev python3-pybind11 pybind11-dev
-    - name: pip install
-      run: pip install .
-    - name: test import
-      run: cd tests/python && ./test_import.py
-    - name: test raw genome
-      run: cd tests/python && ./test_raw_genome.py
-    - name: test xor
-      run: cd tests/python && ./test_xor.py
-    - name: configure tests
-      run: cmake -B build -DGENERATE_PYTHON_BINDINGS=ON -DENABLE_TESTING=ON
-    - name: build tests
-      run: cmake --build build
-    - name: run cmake tests
-      run: cmake --build build --target test
+      - name: dependencies
+        run: sudo apt install -y libboost-all-dev python3-pybind11 pybind11-dev
+      - name: pip install
+        run: pip install .
+      - name: test import
+        run: cd tests/python && ./test_import.py
+      - name: test raw genome
+        run: cd tests/python && ./test_raw_genome.py
+      - name: test xor
+        run: cd tests/python && ./test_xor.py
+      - name: configure tests
+        run: cmake -B build -DGENERATE_PYTHON_BINDINGS=ON -DENABLE_TESTING=ON
+      - name: build tests
+        run: cmake --build build
+      - name: run cmake tests
+        run: cmake --build build --target test
