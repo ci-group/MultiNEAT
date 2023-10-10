@@ -26,7 +26,7 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel --output-dir dist
         env:
-          CIBW_BUILD: cp38-* cp39-* cp310-* cp311-*  # build for 3.8 and higher
+          CIBW_BUILD: cp38-* cp39-* cp310-* cp311-* cp312-*  # build for 3.8 and higher
           CIBW_ARCHS_MACOS: x86_64 arm64 # explicitly also build for mac arm processors
 
       - uses: actions/upload-artifact@v3
