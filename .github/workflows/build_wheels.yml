@@ -24,7 +24,7 @@ jobs:
         run: python -m cibuildwheel --output-dir dist
         env:
           CIBW_BUILD: cp39-*  # build for 3.8 and higher
-          CIBW_ARCHS_WINDOWS: x86_64 i686
+          CIBW_ARCHS_WINDOWS: amd64 win32
           CIBW_ARCHS_MACOS: x86_64 arm64
           CIBW_ARCHS_LINUX: x86_64 i686
 
