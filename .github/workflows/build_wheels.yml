@@ -18,13 +18,15 @@ jobs:
       - uses: actions/setup-python@v3
 
       - name: Install cibuildwheel
-        run: python -m pip install cibuildwheel==2.15.0
+        run: python -m pip install cibuildwheel==2.16.2
 
       - name: Build wheels
         run: python -m cibuildwheel --output-dir dist
         env:
           CIBW_BUILD: cp39-*  # build for 3.8 and higher
-          CIBW_ARCHS_MACOS: x86_64 arm64 # explicitly also build for mac arm processors
+          CIBW_ARCHS_WINDOWS: amd64
+          CIBW_ARCHS_MACOS: x86_64 arm64
+          CIBW_ARCHS_LINUX: amd64
 
       - uses: actions/upload-artifact@v3
         with:
