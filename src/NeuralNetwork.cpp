@@ -263,10 +263,11 @@ NeuralNetwork::NeuralNetwork()
     // clean up other neuron data as well
     for (unsigned int i = 0; i < m_neurons.size(); i++)
     {
-        m_neurons[i].m_a = 1;
+        m_neurons[i].m_a = 0.5; // default 1
         m_neurons[i].m_b = 0;
-        m_neurons[i].m_timeconst = m_neurons[i].m_bias =
-                m_neurons[i].m_membrane_potential = 0;
+        m_neurons[i].m_timeconst = 0;
+        m_neurons[i].m_bias = 0;
+        m_neurons[i].m_membrane_potential = 0;
     }
     Clear();
 }
@@ -339,15 +340,15 @@ void NeuralNetwork::Activate()
     // this will happen.
     for (unsigned int i = 0; i < m_connections.size(); i++)
     {
-        m_neurons[m_connections[i].m_target_neuron_idx].m_activesum +=
-                m_connections[i].m_signal;
+        m_neurons[m_connections[i].m_target_neuron_idx].m_activesum += m_connections[i].m_signal;
     }
     // Now loop nodes_activesums, pass the signals through the activation function
     // and store the result back to nodes_activations
     // also skip inputs since they do not get an activation
-    for (unsigned int i = m_num_inputs; i < m_neurons.size(); i++)
+    for (unsigned int i = m_num_inputs; i < m_neurons.size(); i++) 
     {
         double x = m_neurons[i].m_activesum;
+        // std::cout << "active sum, i.e x = " << x << std::endl;
         m_neurons[i].m_activesum = 0;
         // Apply the activation function
         double y = 0.0;

@@ -43,7 +43,7 @@ void export_Genome(pybind11::module_& mod) {
 
         .def("PrintAllTraits", &Genome::PrintAllTraits)
 
-        .def("BuildPhenotype", &Genome::BuildPhenotype)
+        .def("BuildCPPN", &Genome::BuildCPPN)
         .def("BuildHyperNEATPhenotype", &Genome::BuildHyperNEATPhenotype)
         .def("BuildESHyperNEATPhenotype", &Genome::BuildESHyperNEATPhenotype)
 
