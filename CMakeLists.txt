@@ -54,7 +54,7 @@ if(NOT SKBUILD)
         PRIVATE
         PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/multineat>
-               $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/cereal/include>)
+               cereal/include)
 
     # Not doing this anymore because not all package managers have it.
     # target_link_libraries(MultiNEAT PUBLIC cereal::cereal)
@@ -149,7 +149,7 @@ else()
     target_compile_definitions(_multineat PUBLIC PYTHON_BINDINGS)
     # Not doing this anymore because not all package managers have it.
     #target_link_libraries(_multineat PUBLIC cereal::cereal)
-    target_include_directories(_multineat PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/cereal/include>)
+    target_include_directories(_multineat PUBLIC cereal/include)
 
     install(TARGETS _multineat DESTINATION .)
 
