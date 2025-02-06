@@ -15,7 +15,7 @@ setup(
     version="0.12",  # Update version in conda/meta.yaml as well
     packages=["multineat"],
     cmake_install_dir="multineat",
-    url="https://github.com/A-lamo/MultiNEAT",
+    url="https://github.com/ci-group/MultiNEAT",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
 )
