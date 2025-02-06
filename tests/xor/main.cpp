@@ -29,7 +29,7 @@ double xortest(Genome& g)
     double f = 0;
 
     NeuralNetwork net;
-    g.BuildPhenotype(net);
+    g.BuildCPPN(net);
 
     static const std::vector< std::vector< double > > inputs {
             {0.0,0.0,1.0},
