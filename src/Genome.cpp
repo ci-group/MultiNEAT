@@ -291,7 +291,7 @@ namespace NEAT
 
         m_ID = a_ID;
         int t_innovnum = 1, t_nnum = 1;
-        
+
         // override seed_type if 0 hidden units are specified
         if ((a_SeedType == 1) && (a_NumHidden == 0))
         {
@@ -487,7 +487,7 @@ namespace NEAT
                 // Start very minimally - connect a random input to each output
                 // Also connect the bias to every output
                 for (unsigned int i = 0; i < a_NumOutputs; i++)
-                {
+                {          
                     int t_inp_id = t_RNG.RandInt(1, a_NumInputs - 1);
                     int t_bias_id = a_NumInputs;
                     int t_outp_id = a_NumInputs + 1 + i;
@@ -807,7 +807,7 @@ namespace NEAT
     bool Genome::HasLoops()
     {
         NeuralNetwork net;
-        BuildPhenotype(net);
+        BuildCPPN(net);
 
         // convert the net to a Boost::Graph object
         Graph graph(NumNeurons());
@@ -837,7 +837,7 @@ namespace NEAT
 
 
     // This builds a fastnetwork structure out from the genome
-    void Genome::BuildPhenotype(NeuralNetwork &a_Net) const
+    void Genome::BuildCPPN(NeuralNetwork &a_Net) const
     {
         // first clear out the network
         a_Net.Clear();
@@ -989,7 +989,7 @@ namespace NEAT
         // Begin querying the CPPN
         // Create the neural network that will represent the CPPN
         NeuralNetwork t_temp_phenotype(true, rng);
-        BuildPhenotype(t_temp_phenotype);
+        BuildCPPN(t_temp_phenotype);
         t_temp_phenotype.Flush();
 
         // To ensure network relaxation
@@ -3669,7 +3669,7 @@ namespace NEAT
 
 
         NeuralNetwork t_temp_phenotype(true, rng);
-        BuildPhenotype(t_temp_phenotype);
+        BuildCPPN(t_temp_phenotype);
 
         // Find Inputs to Hidden connections.
         for (unsigned int i = 0; i < input_count; i++)

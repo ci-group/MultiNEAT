@@ -49,12 +49,19 @@ if(NOT SKBUILD)
 
     add_library(MultiNEAT SHARED ${SOURCE_FILES})
 
+    # target_include_directories(
+    #     MultiNEAT
+    #     PRIVATE
+    #     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+    #            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/multineat>
+    #            cereal/include)
+
     target_include_directories(
-        MultiNEAT
-        PRIVATE
-        PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-               $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/multineat>
-               cereal/include)
+    MultiNEAT
+    PRIVATE
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/multineat>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/cereal/include>)
 
     # Not doing this anymore because not all package managers have it.
     # target_link_libraries(MultiNEAT PUBLIC cereal::cereal)

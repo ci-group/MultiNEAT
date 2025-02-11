@@ -65,7 +65,7 @@ class RawGenomeTest(unittest.TestCase):
         return params
 
     def activate_network(self, genome, _input=None):
-        genome.BuildPhenotype(self._net)
+        genome.BuildCPPN(self._net)
         _input = np.array([1, 2, 3], dtype=float) if _input is None else _input
         self._net.Input(_input)
         self._net.ActivateAllLayers()

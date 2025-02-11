@@ -14,7 +14,7 @@ class XorTest(unittest.TestCase):
     def test_xor(self):
         def evaluate(genome):
             net = NEAT.NeuralNetwork()
-            genome.BuildPhenotype(net)
+            genome.BuildCPPN(net)
 
             error = 0
 
